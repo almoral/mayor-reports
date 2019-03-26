@@ -4,7 +4,7 @@ import {Search} from '../search.pipe';
 import {FixUrl} from '../fix-url.pipe';
 import { UniqueValues } from '../unique-values.pipe';
 import { DocStoreService } from '../shared/services/doc-store.service';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 
 
 @Component({

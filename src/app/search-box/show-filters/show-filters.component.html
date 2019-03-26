@@ -1,0 +1,32 @@
+
+  <ng-container *ngIf='showFiltersButton && targetSize === "desktop"'>
+    <ng-container *ngTemplateOutlet='desktopTemplate'></ng-container>
+  </ng-container>
+
+  <ng-container *ngIf='showFiltersButton && targetSize === "mobile"'>
+    <ng-container *ngTemplateOutlet='mobileTemplate'></ng-container>
+  </ng-container>
+
+  <ng-template #desktopTemplate>
+    <div class="search__item search__filter-container">
+      <button type="button" class="search__filter btn grey lighten-3 z-depth-0 hide-on-med-and-down" [ngClass]="{'search__filter--open' : showFiltersToggle}"
+        (click)="showFilters()">
+        <span class="sr-only">Open </span><span>Filters</span>
+        <div class="arrow-down"></div>
+      </button>
+    </div>
+  </ng-template>
+
+
+  <ng-template #mobileTemplate>
+    <div *ngIf='targetSize === "mobile"' class="mobile-filter hide-on-large-only">
+    <button type="button" class="mobile-filter__button" (click)="showFilters()">
+      <span>Filters</span>
+      <svg class="mobile-filter__svg" aria-hidden="true" focusable="false" role="presentation" viewBox="0 0 12 12">
+        <path _ngcontent-c15="" d="M2.5.25a.75.75 0 0 0-.75.75v.378a2.25 2.25 0 0 0 0 4.244V11a.75.75 0 0 0 1.5 0V5.622a2.25 2.25 0 0 0 0-4.244V1A.75.75 0 0 0 2.5.25zm0 4a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5zm3.5-4a.75.75 0 0 0-.75.75v5.378a2.25 2.25 0 0 0 0 4.244V11a.75.75 0 0 0 1.5 0v-.378a2.25 2.25 0 0 0 0-4.244V1A.75.75 0 0 0 6 .25zm0 9a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5zm4.25-7.872V1a.75.75 0 0 0-1.5 0v.378a2.25 2.25 0 0 0 0 4.244V11a.75.75 0 0 0 1.5 0V5.622a2.25 2.25 0 0 0 0-4.244zM9.5 4.25a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5z"
+          fill-rule="evenodd"></path>
+      </svg>
+    </button>
+    </div>
+  </ng-template>
+

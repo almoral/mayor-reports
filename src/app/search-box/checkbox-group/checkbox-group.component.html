@@ -1,0 +1,11 @@
+<p *ngFor="let option of options">
+
+  <input ngClass='filled-in'
+         type="checkbox"
+         id='{{option.value}}'
+         name="{{option.value}}"
+         value="{{option.value}}"
+         [checked]="currentSelectedOptions.indexOf(option.value) !== -1"
+         (click)="selectOption($event)">
+  <label for='{{option.value}}'>{{option.label}}</label>
+</p>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DocStoreService } from '../shared/services/doc-store.service';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-mayor-pdf-search',
@@ -9,19 +9,26 @@ import { Observable } from 'rxjs/Observable';
 })
 export class MayorPdfSearchComponent implements OnInit {
 
-  files: Observable<object>;
+  files$: Observable<object>;
 
   constructor(private documentService: DocStoreService) { }
 
   ngOnInit() {
 
-    this.files = this.documentService.documents$;
+    this.documentService.pdfs.subscribe();
+
+    this.files$ = this.documentService.documents$;
 
     // this.documentService.documents$.subscribe( document => {
     //   this.files.push(document);
     //   console.log('returned doc: ', this.files);
     // });
 
+  }
+
+  setTitleFilter(searchTerm: string) {
+
+    this.documentService.filterDocuments(searchTerm);
   }
 
 }

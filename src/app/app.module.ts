@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { SearchBoxComponent } from './search-box';
 import { ResetButtonComponent } from './reset-button';
 import { AppComponent } from './app.component';
 import {MonthSelectorComponent} from './month-selector';
@@ -14,13 +13,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing/app-routing.module';
 import { UniqueValues } from './unique-values.pipe';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { SearchBoxModule} from './search-box/search-box.module';
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    SearchBoxComponent,
     ResetButtonComponent,
     MonthSelectorComponent,
     YearSelectorComponent,
@@ -34,7 +33,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    SearchBoxModule
   ],
   providers: [
     DocStoreService

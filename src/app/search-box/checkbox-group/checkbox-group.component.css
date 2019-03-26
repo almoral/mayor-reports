@@ -1,0 +1,21 @@
+label {
+  font-size: 13px;
+  color: #333;
+}
+
+/*--Checkboxes--*/
+
+[type="checkbox"] + label {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+[type="checkbox"].filled-in:not(:checked)+label:after {
+  background-color: #e6e6e6;
+  border: 2px solid #e6e6e6;
+}
+
+[type="checkbox"].filled-in:checked+label:after {
+  background-color: #03a9f4;
+  border: 2px solid #03a9f4;
+}

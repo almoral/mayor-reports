@@ -1,1 +1,9 @@
-<app-file-list [fileList]="files" [term]="" [selectedYear]="" [selectedMonth]="" >Loading...</app-file-list>
+<div class="container">
+<mdc-search-container
+    [textBoxPlaceholder]='"Enter Search Term"'
+    [liveFilter]='false'
+    [showFiltersButton]='false'
+    (onSetTitleFilter)='setTitleFilter($event)'
+></mdc-search-container>
+<app-file-list [fileList]="files$ | async" [term]="" [selectedYear]="" [selectedMonth]="" >Loading...</app-file-list>
+</div>
