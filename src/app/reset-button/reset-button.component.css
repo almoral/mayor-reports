@@ -1,4 +1,4 @@
-.button {
+/* .button {
       display: inline-block;
       position: relative;
       width: 120px;
@@ -9,7 +9,7 @@
       background-color: #fff;
       color: #646464;
     }
-    
+
     .button ~ paper-ripple {
       border-radius: 2px;
       overflow: hidden;
@@ -24,7 +24,7 @@
       transition-delay: 0.2s;
       box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
     }
-    
+
     .button.raised:active {
       box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
       transition-delay: 0s;
@@ -40,4 +40,4 @@
 
     input[type='reset']:focus{
       outline: none;
-    }
+    } */
