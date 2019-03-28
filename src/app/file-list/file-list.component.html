@@ -1,26 +1,32 @@
-<div class="is-text-centered">
-  <pagination-controls autoHide="true" (pageChange)="page = $event"></pagination-controls>
-</div>
-
-<div class="file-list-container">
-
-  <ul class="file-list">
-
-    <li class="file-list-item" *ngFor="let file of fileList | paginate: { itemsPerPage: 10, currentPage: page }">
-
+<div class="basic-content-body normal-bullets">
+  <ul>
+    <li
+      *ngFor="
+        let file of (fileList
+          | paginate: { itemsPerPage: 10, currentPage: page })
+      "
+    >
       <div *ngIf="file.showMessage" class="emptyResultsMessage message">
         <p>
-          {{file.showMessage}}
+          {{ file.showMessage }}
         </p>
       </div>
-<div>
-      <a  target="_blank" href="{{file.filePath | fixUrl}}">{{file.label}}</a> <span *ngIf='file.fileSize'>{{file.fileSize}}</span>
-</div>
+      <div>
+        <a target="_blank" href="{{ file.filePath | fixUrl }}">{{
+          file.label
+        }}</a>
+        &nbsp;
+        <span *ngIf="file.fileSize">{{ file.fileSize }}</span>
+      </div>
     </li>
-
   </ul>
 </div>
 
 <div class="is-text-centered">
-  <pagination-controls autoHide="true" (pageChange)="page = $event"></pagination-controls>
+  <mdc-pagination
+    [id]="'pagination'"
+    [maxSize]="7"
+    (pageChange)="page = $event"
+  >
+  </mdc-pagination>
 </div>

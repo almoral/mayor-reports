@@ -1,13 +1,14 @@
-
 <div class="search__item search__textbox-container">
-      <label class="sr-only active" id="mainSearch">Search</label>
-      <input #searchTerm
-      (keyup)='filterByTitle(searchTerm.value)'
-      (keyup.enter) = 'filterByPressingEnter()'
-      type="text"
-      name="calendar-title"
-      id="calendar-title"
-      class="search__input"
-      placeholder={{placeholderText}}
-      >
-  </div>
+  <label class="sr-only active" id="mainSearch">Search</label>
+  <input
+    #searchTerm
+    type="search"
+    class="browser-default form-control search__input"
+    (keyup)="filterByTitle(searchTerm.value)"
+    (keyup.enter)="filterByPressingEnter()"
+    type="text"
+    name="calendar-title"
+    id="calendar-title"
+    placeholder="{{ placeholderText }}"
+  />
+</div>
