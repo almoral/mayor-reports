@@ -23,6 +23,7 @@ import {
 import { SearchBoxModule } from './search-box/search-box.module';
 import { MdcPaginationComponent } from './mdc-pagination/mdc-pagination.component';
 import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
+import { MonthService } from './shared/services/month.service';
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   fgsColor: '#baa20a',
@@ -55,7 +56,7 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     ScrollToModule.forRoot(),
     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig)
   ],
-  providers: [DocStoreService],
+  providers: [DocStoreService, MonthService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

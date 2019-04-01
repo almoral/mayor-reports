@@ -3,6 +3,7 @@ import { DocStoreService } from '../shared/services/doc-store.service';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { MonthService } from '../shared/services/month.service';
 
 @Component({
   selector: 'mdc-mayor-pdf-search',
@@ -11,10 +12,12 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 })
 export class MayorPdfSearchComponent implements OnInit {
   files$: Observable<object>;
+  months = this.monthService.months;
 
   constructor(
     private documentService: DocStoreService,
-    private ngxService: NgxUiLoaderService
+    private ngxService: NgxUiLoaderService,
+    private monthService: MonthService
   ) {}
 
   ngOnInit() {
@@ -31,5 +34,13 @@ export class MayorPdfSearchComponent implements OnInit {
 
   setTitleFilter(searchTerm: string) {
     this.documentService.filterDocuments(searchTerm);
+  }
+
+  setMonthFilter(month: string) {
+    this.documentService.filterDocuments(month);
+  }
+
+  setYearFilter(year: string) {
+    this.documentService.filterDocuments(year);
   }
 }

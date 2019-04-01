@@ -5,6 +5,8 @@
     [showFiltersButton]="false"
     (onSetTitleFilter)="setTitleFilter($event)"
   ></mdc-search-container>
+  <mdc-month-selector [months]="months"></mdc-month-selector>
+  <mdc-year-selector></mdc-year-selector>
   <mdc-file-list
     [fileList]="files$ | async"
     [term]=""
