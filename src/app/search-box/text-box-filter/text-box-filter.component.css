@@ -9,11 +9,9 @@
   border: 0;
 }
 
-
 /* --------------------------
 SEARCH
 -------------------------- */
-
 
 .search__filter,
 .search__item {
@@ -25,7 +23,6 @@ SEARCH
   height: 60px;
 }
 
-
 :host {
   flex: 1 1 auto;
   height: 60px;
@@ -36,7 +33,6 @@ SEARCH
   height: 60px;
 }
 
-
 .search__filter {
   align-items: center;
   justify-content: center;
@@ -45,7 +41,8 @@ SEARCH
 .search__filter:focus,
 .search__input:focus {
   outline-offset: -2px;
-  outline: 3px dotted #3BD1FF;
+  /* outline: 3px dotted #3BD1FF; */
+  outline: 3px dotted #baa20a;
 }
 
 .search__item {
@@ -71,5 +68,3 @@ SEARCH
   border-bottom: 1px solid #bbb;
   box-shadow: none;
 }
-
-
