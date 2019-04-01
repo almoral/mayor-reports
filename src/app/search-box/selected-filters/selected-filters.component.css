@@ -1,41 +1,41 @@
 .selected-filters {
-	margin: 20px 0 0 0;
+  margin: 20px 0 0 0;
 }
 
 .selected-filters__main-title {
-	margin: 0 0 10px 0;
-	font-size: 1rem;
-	font-weight: bold;
-	text-transform: uppercase;
+  margin: 0 0 10px 0;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
 .selected-filters--blue {
-	background-color: #027abb;
-	color: #fff;
-	transition: .2s ease-out;
+  background-color: #027abb;
+  color: #fff;
+  transition: 0.2s ease-out;
 }
 
 .selected-filters--blue:hover,
 .selected-filters--blue:focus {
-	background-color: #03a9f4;
+  background-color: #03a9f4;
   cursor: pointer;
 }
 
 .selected-filters__clear-current,
 .selected-filters__clear-all {
-	background: none;
-	border: none;
+  background: none;
+  border: none;
 }
 
 .selected-filters__clear-current {
-	color: #fff;
-	line-height: initial;
+  color: #fff;
+  line-height: initial;
 }
 
 .selected-filters__clear-all {
-	color: #027abb;
+  color: #027abb;
 }
 
 .selected-filters__clear-all:hover {
-	text-decoration: underline;
+  text-decoration: underline;
 }

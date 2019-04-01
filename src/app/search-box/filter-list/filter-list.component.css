@@ -7,7 +7,7 @@ CALENDAR LEFT WIDGETS
   color: #333;
 }
 
-.widget>input:last-child {
+.widget > input:last-child {
   margin-bottom: 0;
 }
 
@@ -23,17 +23,17 @@ CALENDAR LEFT WIDGETS
 }
 
 .widget-title::after {
-  content: " ";
+  content: ' ';
   display: block;
   height: 3px;
   width: 42px;
   position: absolute;
   bottom: -2px;
   z-index: 2;
-  background-color: #46BCEB;
+  background-color: #46bceb;
 }
 
-input[type=text].form-control {
+input[type='text'].form-control {
   padding: 0 10px;
   border: 1px solid #dbe2e8;
   border-radius: 5px;
@@ -44,7 +44,6 @@ input[type=text].form-control {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-
 }
 
 .sr-only {
@@ -54,10 +53,9 @@ input[type=text].form-control {
   padding: 0;
   margin: -1px;
   overflow: hidden;
-  clip: rect(0,0,0,0);
+  clip: rect(0, 0, 0, 0);
   border: 0;
 }
-
 
 .btn.blue {
   background-color: #03a9f4 !important;
@@ -65,7 +63,6 @@ input[type=text].form-control {
   color: #fff;
   width: 100%;
 }
-
 
 fieldset {
   border-color: transparent;
@@ -77,24 +74,29 @@ fieldset {
   margin: 0 0 1em 0;
 }
 
-	.search-filters__list {
-		max-height: 350px;
-    overflow-y: scroll;
-    margin: 0;
-	}
+.search-filters__list {
+  max-height: 350px;
+  overflow-y: scroll;
+  margin: 0;
+}
 
-	.search-filters__list::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-	}
+.search-filters__list::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
 
-	.search-filters__list::-webkit-scrollbar-thumb {
-    background-color: #0ae;
-    background-image: -webkit-gradient(linear,0 0,0 100%,color-stop(.5,rgba(255,255,255,.2)),color-stop(.5,transparent),to(transparent));
-	}
+.search-filters__list::-webkit-scrollbar-thumb {
+  background-color: #0ae;
+  background-image: -webkit-gradient(
+    linear,
+    0 0,
+    0 100%,
+    color-stop(0.5, rgba(255, 255, 255, 0.2)),
+    color-stop(0.5, transparent),
+    to(transparent)
+  );
+}
 
-	.search-filters__list::-webkit-scrollbar-track {
-
-    background-color: #f5f5f5;
-	}
-
+.search-filters__list::-webkit-scrollbar-track {
+  background-color: #f5f5f5;
+}

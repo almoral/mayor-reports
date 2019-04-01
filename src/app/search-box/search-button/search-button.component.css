@@ -1,6 +1,5 @@
-
 :host {
-    display: flex;
+  display: flex;
 }
 
 .sr-only {
@@ -10,34 +9,34 @@
   padding: 0;
   margin: -1px;
   overflow: hidden;
-  clip: rect(0,0,0,0);
+  clip: rect(0, 0, 0, 0);
   border: 0;
 }
 
 .btn-custom--blue {
-	background-color: #027abb;
+  background-color: #027abb;
 }
 
 .btn-custom--blue:hover,
 .btn-custom--blue:focus {
-	background-color: #03a9f4;
+  background-color: #03a9f4;
 }
 
 .search__button {
-    min-height: 60px;
+  min-height: 60px;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+  background-color: #baa20a;
 }
 
 .search__button:hover,
 .search__button:focus {
-  background-color: #03a9f4;
+  /* background-color: #03a9f4; */
+  background-color: #baa20a;
 }
 
-
-
 .search__item {
-	min-height: 60px;
+  min-height: 60px;
 }
 
 .search_button-svg {

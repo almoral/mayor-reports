@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DocStoreService } from '../shared/services/doc-store.service';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'mdc-mayor-pdf-search',
@@ -11,10 +12,21 @@ import { tap } from 'rxjs/operators';
 export class MayorPdfSearchComponent implements OnInit {
   files$: Observable<object>;
 
-  constructor(private documentService: DocStoreService) {}
+  constructor(
+    private documentService: DocStoreService,
+    private ngxService: NgxUiLoaderService
+  ) {}
 
   ngOnInit() {
-    this.files$ = this.documentService.filteredDocuments$;
+    this.ngxService.start();
+
+    this.files$ = this.documentService.filteredDocuments$.pipe(
+      tap((data: object[]) => {
+        if (data && data.length > 0) {
+          this.ngxService.stop();
+        }
+      })
+    );
   }
 
   setTitleFilter(searchTerm: string) {
