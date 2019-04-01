@@ -82,6 +82,6 @@ CALENDAR PAGINATION
 
 button.prev:focus,
 button.next:focus {
-  background-color: #03a9f4 !important;
+  background-color: #baa20a !important;
   color: #fff;
 }
