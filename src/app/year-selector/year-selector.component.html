@@ -1,5 +1,9 @@
-<div>
-  <select class="browser-default" aria-label="Select a year">
+<div class="sort-select">
+  <select
+    class="browser-default sort-select__select z-depth-1"
+    aria-label="Select a year"
+  >
+    <option value="">Select a month</option>
     <option *ngFor="let year of years" value="{{ year }}"> {{ year }}</option>
   </select>
 </div>
