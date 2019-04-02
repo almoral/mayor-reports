@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { DocStoreService } from '../shared/services/doc-store.service';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, of, from } from 'rxjs';
+import { tap, distinctUntilChanged, map, filter, reduce } from 'rxjs/operators';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { MonthService } from '../shared/services/month.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'mdc-mayor-pdf-search',
@@ -12,6 +13,8 @@ import { MonthService } from '../shared/services/month.service';
 })
 export class MayorPdfSearchComponent implements OnInit {
   files$: Observable<object>;
+  years$: Observable<string[]>;
+
   months = this.monthService.months;
 
   constructor(
@@ -25,9 +28,18 @@ export class MayorPdfSearchComponent implements OnInit {
 
     this.files$ = this.documentService.filteredDocuments$.pipe(
       tap((data: object[]) => {
-        if (data && data.length > 0) {
+        if (!_.isNil(data) && data.length > 0) {
           this.ngxService.stop();
+          this.years$ = this.getYearsFromResults(data);
         }
+      })
+    );
+  }
+
+  getYearsFromResults(data: object[]): Observable<Array<string>> {
+    return of(data).pipe(
+      map(files => {
+        return _.compact(_.uniq(_.map(files, 'year')));
       })
     );
   }

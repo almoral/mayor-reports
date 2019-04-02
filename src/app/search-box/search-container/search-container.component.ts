@@ -1,8 +1,15 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  Input,
+  Output,
+  EventEmitter
+} from '@angular/core';
 import { Observable, combineLatest, BehaviorSubject, Subject } from 'rxjs';
-import { map, take, takeUntil } from 'rxjs/operators';
+import { map, take, takeUntil, distinctUntilChanged } from 'rxjs/operators';
 import * as _ from 'lodash';
-
+import { MonthService } from '../../shared/services/month.service';
 
 @Component({
   selector: 'mdc-search-container',
@@ -10,13 +17,14 @@ import * as _ from 'lodash';
   styleUrls: ['./search-container.component.css']
 })
 export class SearchContainerComponent implements OnInit, OnDestroy {
-
-  constructor() { }
+  constructor(private monthService: MonthService) {}
 
   showFiltersToggle = false;
 
   // Defining properties here to create reusable filter components.
   // We're using the smart container dumb component approach.
+
+  @Input() years: any;
 
   @Input() textBoxPlaceholder: string;
   @Input() titleFilter$: string;
@@ -33,6 +41,7 @@ export class SearchContainerComponent implements OnInit, OnDestroy {
   @Output() onSetCategoriesFilter = new EventEmitter();
   @Output() onSetTitleFilter = new EventEmitter();
 
+  months = this.monthService.months;
 
   selectedFilters$: Observable<Array<Object>>;
   combinedFilters$: Observable<Array<Object>>;
@@ -46,24 +55,14 @@ export class SearchContainerComponent implements OnInit, OnDestroy {
   // Setting the liveFilter value to false will display the search button and trigger a search by pressing enter in the textbox or by clicking on the search button.
 
   ngOnInit() {
-
-      this.searchTerm$
-      .pipe(
-        takeUntil(this.stop$)
-      )
-      .subscribe((term) => {
-        if (this.liveFilter) {
-          this.filterByTitle(term);
-        }
-      });
-
+    this.searchTerm$.pipe(takeUntil(this.stop$)).subscribe(term => {
+      if (this.liveFilter) {
+        this.filterByTitle(term);
+      }
+    });
 
     // Combining the different filter types to create a master list of filters to populate the chips.
-    this.combinedFilters$ = combineLatest(
-      this.types$,
-      this.categories$
-    )
-    .pipe(
+    this.combinedFilters$ = combineLatest(this.types$, this.categories$).pipe(
       map(([types, categories]) => [...types, ...categories])
     );
 
@@ -71,14 +70,11 @@ export class SearchContainerComponent implements OnInit, OnDestroy {
     this.selectedFilters$ = combineLatest(
       this.currentSelectedTypes$,
       this.currentSelectedCategories$
-    )
-    .pipe(
+    ).pipe(
       // Flattening the arrays... this is so pretty.
       map(([types, categories]) => [...types, ...categories])
     );
-
   }
-
 
   // Handling unsubscribptions from a single place.
   ngOnDestroy() {
@@ -87,27 +83,24 @@ export class SearchContainerComponent implements OnInit, OnDestroy {
 
   // Calling lodash's difference method on both categories and types because the function ignores values that don't exist in the array it's looking at.
   removeFilter(searchTerm: string) {
-
     this.currentSelectedTypes$
-    .pipe(
-      map((types) => _.difference(types, [searchTerm])),
-      take(1)
-    )
-    .subscribe((value) => {
-      this.onSetTypesFilter.emit(value);
-    });
+      .pipe(
+        map(types => _.difference(types, [searchTerm])),
+        take(1)
+      )
+      .subscribe(value => {
+        this.onSetTypesFilter.emit(value);
+      });
 
     this.currentSelectedCategories$
       .pipe(
-        map((categories) => _.difference(categories, [searchTerm])),
+        map(categories => _.difference(categories, [searchTerm])),
         take(1)
       )
-      .subscribe((value) => {
+      .subscribe(value => {
         this.onSetCategoriesFilter.emit(value);
       });
-
   }
-
 
   showFilters(toggleValue: boolean) {
     this.showFiltersToggle = toggleValue;
@@ -118,7 +111,7 @@ export class SearchContainerComponent implements OnInit, OnDestroy {
   }
 
   onTypesSelected(options: string[]) {
-      this.onSetTypesFilter.emit(options);
+    this.onSetTypesFilter.emit(options);
   }
 
   onCategoriesSelected(options: string[]) {
@@ -129,10 +122,8 @@ export class SearchContainerComponent implements OnInit, OnDestroy {
   updateTitleFilter() {
     // I need to think of a more declarative way to handle this.
     this.searchTerm$
-    .pipe(
-      take(1)
-    )
-    .subscribe((searchTerm) => this.onSetTitleFilter.emit(searchTerm));
+      .pipe(take(1))
+      .subscribe(searchTerm => this.onSetTitleFilter.emit(searchTerm));
   }
 
   // This method is used when liveFilter is set to true. It's a realtime filter.
@@ -144,5 +135,4 @@ export class SearchContainerComponent implements OnInit, OnDestroy {
     this.onSetCategoriesFilter.emit([]);
     this.onSetTypesFilter.emit([]);
   }
-
 }

@@ -3,15 +3,14 @@
     [textBoxPlaceholder]="'Enter Search Term'"
     [liveFilter]="false"
     [showFiltersButton]="false"
+    [years]="years$ | async"
     (onSetTitleFilter)="setTitleFilter($event)"
   ></mdc-search-container>
-  <mdc-month-selector [months]="months"></mdc-month-selector>
-  <mdc-year-selector></mdc-year-selector>
+
   <mdc-file-list
     [fileList]="files$ | async"
     [term]=""
     [selectedYear]=""
     [selectedMonth]=""
-    >Loading...</mdc-file-list
-  >
+  ></mdc-file-list>
 </div>

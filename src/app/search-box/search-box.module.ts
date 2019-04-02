@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { TextBoxFilterComponent } from './text-box-filter/text-box-filter.component';
 import { SearchContainerComponent } from './search-container/search-container.component';
 import { CheckboxGroupComponent } from './checkbox-group/checkbox-group.component';
-import { ReactiveFormsModule} from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { FilterListComponent } from './filter-list/filter-list.component';
 import { SelectedFiltersComponent } from './selected-filters/selected-filters.component';
 import { ShowFiltersComponent } from './show-filters/show-filters.component';
 import { FilterListContainerComponent } from './filter-list-container/filter-list-container.component';
 import { SearchButtonComponent } from './search-button/search-button.component';
-
+import { MonthSelectorComponent } from '../month-selector/month-selector.component';
+import { YearSelectorComponent } from '../year-selector/year-selector.component';
 
 @NgModule({
   declarations: [
@@ -20,14 +21,11 @@ import { SearchButtonComponent } from './search-button/search-button.component';
     SelectedFiltersComponent,
     ShowFiltersComponent,
     FilterListContainerComponent,
-    SearchButtonComponent
+    SearchButtonComponent,
+    MonthSelectorComponent,
+    YearSelectorComponent
   ],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule
-  ],
-  exports: [
-    SearchContainerComponent
-  ]
+  imports: [CommonModule, ReactiveFormsModule],
+  exports: [SearchContainerComponent]
 })
-export class SearchBoxModule { }
+export class SearchBoxModule {}

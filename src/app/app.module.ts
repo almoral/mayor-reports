@@ -2,8 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ResetButtonComponent } from './reset-button';
 import { AppComponent } from './app.component';
-import { MonthSelectorComponent } from './month-selector';
-import { YearSelectorComponent } from './year-selector';
 import { MayorPdfSearchComponent } from './mayor-pdf-search/mayor-pdf-search.component';
 import { FileListComponent } from './file-list/file-list.component';
 import { Search } from './search.pipe';
@@ -38,8 +36,6 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   declarations: [
     AppComponent,
     ResetButtonComponent,
-    MonthSelectorComponent,
-    YearSelectorComponent,
     MayorPdfSearchComponent,
     FileListComponent,
     Search,

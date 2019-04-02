@@ -1,69 +1,64 @@
-
-
-
+<div class="searchContainer">
   <div class="search">
     <!-- Show Filters Button -->
     <mdc-show-filters
-      [showFiltersToggle] = 'showFiltersToggle'
-      [targetSize] = '"desktop"'
-      (onShowFilters) = 'showFilters($event)'
+      [showFiltersToggle]="showFiltersToggle"
+      [targetSize]="'desktop'"
+      (onShowFilters)="showFilters($event)"
     ></mdc-show-filters>
     <!-- End Show Filters Button -->
 
     <!-- Filter Container -->
     <mdc-filter-list-container
-      [showFiltersToggle] = 'showFiltersToggle'
-      [types$] = 'types$'
-      [categories$] = 'categories$'
-      [currentSelectedCategories$] = 'currentSelectedCategories$'
-      [currentSelectedTypes$] = 'currentSelectedTypes$'
-      (onShowFilters) = 'showFilters($event)'
-      (typesSelected) = 'onTypesSelected($event)'
-      (categoriesSelected) = 'onCategoriesSelected($event)'
-      (onClearFilters) = 'clearFilters()'
+      [showFiltersToggle]="showFiltersToggle"
+      [types$]="types$"
+      [categories$]="categories$"
+      [currentSelectedCategories$]="currentSelectedCategories$"
+      [currentSelectedTypes$]="currentSelectedTypes$"
+      (onShowFilters)="showFilters($event)"
+      (typesSelected)="onTypesSelected($event)"
+      (categoriesSelected)="onCategoriesSelected($event)"
+      (onClearFilters)="clearFilters()"
     >
     </mdc-filter-list-container>
     <!-- End Filter Container -->
 
-      <mdc-text-box-filter
-        [titleFilter] = 'titleFilter$ | async'
-        [placeholderText] = 'textBoxPlaceholder'
-        (onFilterByTitle) = 'setTitleFilter($event)'
-        (onFilterByPressingEnter) = 'updateTitleFilter()'
-      >
-      </mdc-text-box-filter>
+    <mdc-text-box-filter
+      [titleFilter]="titleFilter$ | async"
+      [placeholderText]="textBoxPlaceholder"
+      (onFilterByTitle)="setTitleFilter($event)"
+      (onFilterByPressingEnter)="updateTitleFilter()"
+    >
+    </mdc-text-box-filter>
 
     <!-- This is the search button with icon. I'm leaving this in case Jaime decides she wants it. -->
 
-      <mdc-search-button
-        [liveFilter] = 'liveFilter'
-        (onUpdate) = 'updateTitleFilter()'
-      >
+    <mdc-search-button
+      [liveFilter]="liveFilter"
+      (onUpdate)="updateTitleFilter()"
+    >
+    </mdc-search-button>
 
-      </mdc-search-button>
-
-  <!-- This is the search button with icon. I'm leaving this in case Jaime decides she wants it. -->
-
+    <!-- This is the search button with icon. I'm leaving this in case Jaime decides she wants it. -->
   </div>
+  <mdc-month-selector [months]="months"></mdc-month-selector>
+
+  <mdc-year-selector [years]="years"></mdc-year-selector>
+</div>
 
 <mdc-selected-filters
-  [combinedFilters$]='combinedFilters$'
-  [selectedFilters$]='selectedFilters$'
-  (onRemoveFilter) = 'removeFilter($event)'
-  (onClearFilters) = 'clearFilters()'
+  [combinedFilters$]="combinedFilters$"
+  [selectedFilters$]="selectedFilters$"
+  (onRemoveFilter)="removeFilter($event)"
+  (onClearFilters)="clearFilters()"
 >
 </mdc-selected-filters>
 
-  <!-- Show Filters Button -->
-    <mdc-show-filters
-      [showFiltersToggle]='showFiltersToggle'
-      [targetSize]='"mobile"'
-      (onShowFilters)='showFilters($event)'
-      >
-    </mdc-show-filters>
-  <!-- End Show Filters Button -->
-
-
-
-
-
+<!-- Show Filters Button -->
+<mdc-show-filters
+  [showFiltersToggle]="showFiltersToggle"
+  [targetSize]="'mobile'"
+  (onShowFilters)="showFilters($event)"
+>
+</mdc-show-filters>
+<!-- End Show Filters Button -->
