@@ -1,59 +1,59 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class MonthService {
-  months = [
-    {
-      label: 'January',
-      value: '01'
-    },
-    {
-      label: 'February',
-      value: '02'
-    },
-    {
-      label: 'March',
-      value: '03'
-    },
-    {
-      label: 'April',
-      value: '04'
-    },
-    {
-      label: 'May',
-      value: '05'
-    },
-    {
-      label: 'June',
-      value: '06'
-    },
-    {
-      label: 'July',
-      value: '07'
-    },
-    {
-      label: 'August',
-      value: '08'
-    },
-    {
-      label: 'September',
-      value: '09'
-    },
-    {
-      label: 'October',
-      value: '10'
-    },
-    {
-      label: 'November',
-      value: '11'
-    },
-    {
-      label: 'December',
-      value: '12'
-    }
-  ];
+    months = [
+        {
+            label: 'January',
+            value: 'January'
+        },
+        {
+            label: 'February',
+            value: 'February'
+        },
+        {
+            label: 'March',
+            value: 'March'
+        },
+        {
+            label: 'April',
+            value: 'April'
+        },
+        {
+            label: 'May',
+            value: 'May'
+        },
+        {
+            label: 'June',
+            value: 'June'
+        },
+        {
+            label: 'July',
+            value: 'July'
+        },
+        {
+            label: 'August',
+            value: 'August'
+        },
+        {
+            label: 'September',
+            value: 'September'
+        },
+        {
+            label: 'October',
+            value: 'October'
+        },
+        {
+            label: 'November',
+            value: 'November'
+        },
+        {
+            label: 'December',
+            value: 'December'
+        }
+    ];
 
-  constructor() {}
+    constructor() {}
 }
