@@ -7,64 +7,68 @@ import { ActivatedRoute, Params } from '@angular/router';
 import * as _ from 'lodash';
 
 export interface PDF {
-  showMessage: boolean;
-  filePath: string;
-  fileSize: string;
-  label: string;
-  errorMessage: string;
-  month: string;
-  monthLabel: string;
-  year: string;
+    showMessage: boolean;
+    filePath: string;
+    fileSize: string;
+    label: string;
+    errorMessage: string;
+    month: string;
+    monthLabel: string;
+    year: string;
 }
 
 @Injectable()
 export class DocStoreService {
-  documentSubject: BehaviorSubject<PDF[]> = new BehaviorSubject([
-    {
-      showMessage: false,
-      filePath: '',
-      fileSize: '',
-      label: '',
-      errorMessage: '',
-      month: '',
-      monthLabel: '',
-      year: ''
-    }
-  ]);
+    documentSubject: BehaviorSubject<PDF[]> = new BehaviorSubject([
+        {
+            showMessage: false,
+            filePath: '',
+            fileSize: '',
+            label: '',
+            errorMessage: '',
+            month: '',
+            monthLabel: '',
+            year: ''
+        }
+    ]);
 
-  public documents$: Observable<PDF[]> = this.documentSubject.asObservable();
+    public documents$: Observable<PDF[]> = this.documentSubject.asObservable();
 
-  filteredDocumentsSubject = new BehaviorSubject<PDF[]>(null);
-  filteredDocuments$ = this.filteredDocumentsSubject.asObservable();
+    filteredDocumentsSubject = new BehaviorSubject<PDF[]>(null);
+    filteredDocuments$ = this.filteredDocumentsSubject.asObservable();
 
-  constructor(private http: HttpClient, private route: ActivatedRoute) {
-    this.requestPdfs();
-  }
+    currentSelectedYearsSubject = new BehaviorSubject([]);
+    currentSelectedYears$ = this.currentSelectedYearsSubject.asObservable();
 
-  requestPdfs() {
-    this.route.queryParams
-      .pipe(
-        switchMap((params: Params) =>
-          this.http.get(environment.mayorUrl, { params: params })
-        ),
-        tap((file: any) => this.documentSubject.next(file)),
-        tap(() => this.filterDocuments('')),
-        take(1)
-      )
-      .subscribe();
-  }
+    currentSelectedMonthsSubject = new BehaviorSubject([]);
+    currentSelectedMonths$ = this.currentSelectedMonthsSubject.asObservable();
 
-  filterDocuments(searchTerm: string) {
-    const documents = this.documentSubject.getValue();
-
-    if (_.isEmpty(searchTerm)) {
-      this.filteredDocumentsSubject.next(documents);
+    constructor(private http: HttpClient, private route: ActivatedRoute) {
+        this.requestPdfs();
     }
 
-    this.filteredDocumentsSubject.next(
-      _.filter(documents, (document: PDF) => {
-        return new RegExp(searchTerm, 'i').test(document.label);
-      })
-    );
-  }
+    requestPdfs() {
+        this.route.queryParams
+            .pipe(
+                switchMap((params: Params) => this.http.get(environment.mayorUrl, { params: params })),
+                tap((file: any) => this.documentSubject.next(file)),
+                tap(() => this.filterDocuments('')),
+                take(1)
+            )
+            .subscribe();
+    }
+
+    filterDocuments(searchTerm: string) {
+        const documents = this.documentSubject.getValue();
+
+        if (_.isEmpty(searchTerm)) {
+            this.filteredDocumentsSubject.next(documents);
+        }
+
+        this.filteredDocumentsSubject.next(
+            _.filter(documents, (document: PDF) => {
+                return new RegExp(searchTerm, 'i').test(document.label);
+            })
+        );
+    }
 }

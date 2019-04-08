@@ -3,7 +3,8 @@
     [liveFilter]="false"
     [showFiltersButton]="false"
     [years]="years$ | async"
-    [currentSelectedTypes$]="years$ | async"
+    [currentSelectedTypes$]="currentSelectedYears$ | async"
+    [currentSelectedCategories$]="currentSelectedMonths$ | async"
     (onSetTitleFilter)="setTitleFilter($event)"
     (onSetMonthFilter)="setMonthFilter($event)"
     (onSetYearFilter)="setYearFilter($event)"></mdc-search-container>
