@@ -1,5 +1,7 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import * as _ from 'lodash';
+import { Observable } from 'rxjs';
+import { Option } from '../../shared/interfaces/interfaces';
 
 @Component({
   selector: 'mdc-checkbox-group',
@@ -7,11 +9,15 @@ import * as _ from 'lodash';
   styleUrls: ['checkbox-group.component.css']
 })
 export class CheckboxGroupComponent implements OnInit {
-  @Input() options: Array<Object>;
+  @Input() options: Array<Option>;
 
-  @Input() currentSelectedOptions: Array<string>;
+  @Input() currentSelectedOptions: Array<Option>;
 
   @Output() optionsSelected = new EventEmitter();
+
+  @Input() currentDisabledOptions$: Observable<Array<Option>>;
+
+  isDisabled: boolean;
 
   constructor() {}
 
@@ -26,7 +32,8 @@ export class CheckboxGroupComponent implements OnInit {
       this.optionsSelected.emit(this.currentSelectedOptions);
     } else {
       this.currentSelectedOptions.push(event.target.value);
-      this.optionsSelected.emit(this.currentSelectedOptions);
+      //   this.optionsSelected.emit(this.currentSelectedOptions);
+      this.optionsSelected.emit(event.target.value);
     }
   }
 }

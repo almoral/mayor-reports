@@ -70,10 +70,13 @@ export class MayorPdfSearchComponent implements OnInit {
             // Returning an object so the checkbox component gets the right shape.
             arrayYears.push({
               label: year,
-              value: year
+              value: year,
+              isDisabled: false
             });
           });
-          this.yearsSubject.next(arrayYears);
+          if (arrayYears.length > 0) {
+            this.yearsSubject.next(arrayYears);
+          }
         }),
         take(1)
       )
