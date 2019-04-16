@@ -2,9 +2,10 @@
   <mdc-search-container
     [textBoxPlaceholder]="'Enter Search Term'"
     [liveFilter]="false"
-    [showFiltersButton]="false"
-    [years]="years$ | async"
+    [showFiltersButton]="true"
     (onSetTitleFilter)="setTitleFilter($event)"
+    [currentSelectedTypes$]="years$ | async"
+    [currentSelectedCategories$]="months"
   ></mdc-search-container>
 
   <mdc-file-list

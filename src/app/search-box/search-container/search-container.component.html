@@ -2,6 +2,7 @@
   <div class="search">
     <!-- Show Filters Button -->
     <mdc-show-filters
+      [showFiltersButton]="showFiltersButton"
       [showFiltersToggle]="showFiltersToggle"
       [targetSize]="'desktop'"
       (onShowFilters)="showFilters($event)"
@@ -41,9 +42,9 @@
 
     <!-- This is the search button with icon. I'm leaving this in case Jaime decides she wants it. -->
   </div>
-  <mdc-month-selector [months]="months"></mdc-month-selector>
+  <!-- <mdc-month-selector [months]="months"></mdc-month-selector>
 
-  <mdc-year-selector [years]="years"></mdc-year-selector>
+  <mdc-year-selector [years]="years"></mdc-year-selector> -->
 </div>
 
 <mdc-selected-filters
