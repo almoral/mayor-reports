@@ -7,7 +7,6 @@ import { Observable } from 'rxjs';
   styleUrls: ['./filter-list-container.component.css']
 })
 export class FilterListContainerComponent implements OnInit {
-
   @Input() showFiltersToggle: boolean;
   @Input() types$: Observable<Array<Object>>;
   @Input() categories$: Observable<Array<Object>>;
@@ -32,11 +31,10 @@ export class FilterListContainerComponent implements OnInit {
   }
 
   showFilters() {
-    this.onShowFilters.emit(this.showFiltersToggle = !this.showFiltersToggle);
+    this.onShowFilters.emit((this.showFiltersToggle = !this.showFiltersToggle));
   }
 
   clearFilters() {
     this.onClearFilters.emit();
   }
-
 }

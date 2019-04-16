@@ -6,21 +6,17 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./filter-list.component.css']
 })
 export class FilterListComponent implements OnInit {
-
   @Input() heading: string;
   @Input() options: Array<Object>;
   @Input() currentSelectedOptions: Array<Object>;
 
   @Output() optionsSelected = new EventEmitter();
 
+  constructor() {}
 
-  constructor() { }
+  ngOnInit() {}
 
-  ngOnInit() {
+  onOptionsSelected(option: string) {
+    this.optionsSelected.emit(option);
   }
-
-  onOptionsSelected(options: Array<string>) {
-    this.optionsSelected.emit(options);
-  }
-
 }
