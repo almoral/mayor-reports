@@ -44,7 +44,7 @@
     <!-- Start Types filter -->
     <div class="search-filters__list">
       <mdc-filter-list
-        [heading]="'Type'"
+        [heading]="'Years'"
         [options]="types$"
         [currentSelectedOptions]="currentSelectedTypes$ | async"
         (optionsSelected)="onTypesSelected($event)"
@@ -56,7 +56,7 @@
     <!-- Start Categories filter -->
     <div class="search-filters__list">
       <mdc-filter-list
-        [heading]="'Category'"
+        [heading]="'Months'"
         [options]="categories$ | async"
         [currentSelectedOptions]="currentSelectedCategories$ | async"
         (optionsSelected)="onCategoriesSelected($event)"

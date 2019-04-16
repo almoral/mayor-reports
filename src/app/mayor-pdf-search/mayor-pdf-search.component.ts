@@ -67,14 +67,14 @@ export class MayorPdfSearchComponent implements OnInit {
   }
 
   setTitleFilter(searchTerm: string) {
-    this.documentService.filterDocuments(searchTerm);
+    this.documentService.setSearchTermSubject(searchTerm);
   }
 
-  setMonthFilter(month: string) {
-    this.documentService.filterDocuments(month);
+  setMonthFilter(months: string[]) {
+    this.documentService.setMonthsSubject(months);
   }
 
-  setYearFilter(year: string) {
-    this.documentService.filterDocuments(year);
+  setYearFilter(year: string[]) {
+    this.documentService.setYearsSubject(year);
   }
 }
