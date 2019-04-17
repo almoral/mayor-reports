@@ -110,8 +110,8 @@ export class SearchContainerComponent implements OnInit, OnDestroy {
     this.searchTermSubject.next(title);
   }
 
-  onTypesSelected(options: string[]) {
-    this.onSetTypesFilter.emit(options);
+  onTypesSelected(option: string) {
+    this.onSetTypesFilter.emit(option);
   }
 
   onCategoriesSelected(options: string[]) {
@@ -120,7 +120,6 @@ export class SearchContainerComponent implements OnInit, OnDestroy {
 
   //  This method is used by the search button and pressing enter on the textbox when liveFilter is set to false.
   updateTitleFilter() {
-    // I need to think of a more declarative way to handle this.
     this.searchTerm$
       .pipe(take(1))
       .subscribe(searchTerm => this.onSetTitleFilter.emit(searchTerm));

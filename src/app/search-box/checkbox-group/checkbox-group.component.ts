@@ -1,5 +1,6 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import * as _ from 'lodash';
+import { Option } from '../selected-filters/selected-filters.component';
 
 @Component({
   selector: 'mdc-checkbox-group',
@@ -8,7 +9,7 @@ import * as _ from 'lodash';
 })
 export class CheckboxGroupComponent implements OnInit {
   @Input()
-  options: Array<Object>;
+  options: Array<Option>;
 
   @Input()
   currentSelectedOptions: Array<string>;
@@ -28,7 +29,8 @@ export class CheckboxGroupComponent implements OnInit {
       );
       this.optionsSelected.emit(this.currentSelectedOptions);
     } else {
-      this.currentSelectedOptions.push(event.target.value);
+      //   this.currentSelectedOptions.push(event.target.value);
+      this.currentSelectedOptions = event.target.value;
       //   this.optionsSelected.emit(this.currentSelectedOptions);
       this.optionsSelected.emit(event.target.value);
     }

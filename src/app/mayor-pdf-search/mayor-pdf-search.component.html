@@ -5,8 +5,8 @@
     [showFiltersButton]="true"
     (onSetTitleFilter)="setTitleFilter($event)"
     [years]="years$ | async"
-    [currentSelectedTypes$]="currentSelectedYears$ | async"
-    [currentSelectedCategories$]="currentSelectedMonths$ | async"
+    [currentSelectedTypes$]="currentSelectedYear$ | async"
+    [currentSelectedCategories$]="currentSelectedMonth$ | async"
   ></mdc-search-container>
 
   <mdc-file-list
