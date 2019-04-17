@@ -22,10 +22,12 @@ export class FilterListContainerComponent implements OnInit {
 
   ngOnInit() {}
 
+  // These are the year options
   onTypesSelected($event) {
     this.typesSelected.emit($event);
   }
 
+  // These are the month options.
   onCategoriesSelected($event) {
     this.categoriesSelected.emit($event);
   }

@@ -110,10 +110,12 @@ export class SearchContainerComponent implements OnInit, OnDestroy {
     this.searchTermSubject.next(title);
   }
 
+  // These are the years options.
   onTypesSelected(option: string) {
     this.onSetTypesFilter.emit(option);
   }
 
+  // These are the month options.
   onCategoriesSelected(options: string[]) {
     this.onSetCategoriesFilter.emit(options);
   }

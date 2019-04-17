@@ -80,12 +80,26 @@ export class MayorPdfSearchComponent implements OnInit {
   }
 
   setMonthFilter(month: string) {
-    console.log('month filter: ', month);
-    this.documentService.setMonthsSubject(month);
+    // console.log('month filter: ', month);
+    // this.documentService.setMonthsSubject(month);
+
+    console.log(
+      'months docs: ',
+      this.documentService.documentSubject.getValue()
+    );
+
+    this.dataStoreService.filterDocumentsByMonth(
+      this.documentService.documentSubject.getValue(),
+      month
+    );
   }
 
   setYearFilter(year: string) {
-    console.log('year filter: ', year);
-    this.documentService.setYearsSubject(year);
+    // console.log('year filter: ', year);
+    // this.documentService.setYearsSubject(year);
+    this.dataStoreService.filterDocumentsByYear(
+      this.documentService.documentSubject.getValue(),
+      year
+    );
   }
 }

@@ -4,6 +4,8 @@
     [liveFilter]="false"
     [showFiltersButton]="true"
     (onSetTitleFilter)="setTitleFilter($event)"
+    (onSetCategoriesFilter)="setMonthFilter($event)"
+    (onSetTypesFilter)="setYearFilter($event)"
     [years]="years$ | async"
     [currentSelectedTypes$]="currentSelectedYear$ | async"
     [currentSelectedCategories$]="currentSelectedMonth$ | async"

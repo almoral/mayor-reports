@@ -7,51 +7,51 @@ export class MonthService {
   months = [
     {
       label: 'January',
-      value: '01'
+      value: 'January'
     },
     {
       label: 'February',
-      value: '02'
+      value: 'February'
     },
     {
       label: 'March',
-      value: '03'
+      value: 'March'
     },
     {
       label: 'April',
-      value: '04'
+      value: 'April'
     },
     {
       label: 'May',
-      value: '05'
+      value: 'May'
     },
     {
       label: 'June',
-      value: '06'
+      value: 'June'
     },
     {
       label: 'July',
-      value: '07'
+      value: 'July'
     },
     {
       label: 'August',
-      value: '08'
+      value: 'August'
     },
     {
       label: 'September',
-      value: '09'
+      value: 'September'
     },
     {
       label: 'October',
-      value: '10'
+      value: 'October'
     },
     {
       label: 'November',
-      value: '11'
+      value: 'November'
     },
     {
       label: 'December',
-      value: '12'
+      value: 'December'
     }
   ];
 

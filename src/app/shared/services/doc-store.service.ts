@@ -52,9 +52,7 @@ export class DocStoreService {
         tap((file: any) => this.documentSubject.next(file)),
         tap(() => {
           this.dataStoreService.filteredDocumentsSubject.next(
-            //   this.filterPDFs();
             this.documentSubject.getValue()
-            //   ''
           );
         }),
         take(1)
@@ -72,17 +70,5 @@ export class DocStoreService {
 
   setSearchTermSubject(searchTerm: string) {
     this.dataStoreService.searchTermSubject.next(searchTerm);
-  }
-
-  filterPDFs() {
-    // const documents =
-    this.dataStoreService.filterDocuments(
-      this.documentSubject.getValue(),
-      this.dataStoreService.searchTermSubject.getValue(),
-      this.dataStoreService.currentSelectedMonthSubject.getValue(),
-      this.dataStoreService.currentSelectedYearSubject.getValue()
-    );
-
-    // this.dataStoreService.filteredDocumentsSubject.next(documents);
   }
 }

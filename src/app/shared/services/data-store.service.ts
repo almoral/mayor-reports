@@ -60,28 +60,38 @@ export class DataStoreService {
         return new RegExp(searchTerm, 'i').test(document.label);
       })
     );
+
+    return this.filteredDocumentsSubject.getValue();
   }
 
   filterDocumentsByMonth(documents: PDF[], month?: string) {
     if (!month) {
-      return documents;
+      this.filteredDocumentsSubject.next(documents);
     }
 
     // filter by intersecting months.
-    return _.filter(documents, (document: PDF) => {
-      return !_.isEmpty(_.intersection(month, document.label));
-    });
+    this.filteredDocumentsSubject.next(
+      _.filter(documents, (document: PDF) => {
+        return new RegExp(month, 'i').test(document.label);
+      })
+    );
+
+    return this.filteredDocumentsSubject.getValue();
   }
 
   filterDocumentsByYear(documents: PDF[], year?: string) {
     if (!year) {
-      return documents;
+      this.filteredDocumentsSubject.next(documents);
     }
 
     // filter by intersecting years.
-    return _.filter(documents, (document: PDF) => {
-      return !_.isEmpty(_.intersection(year, document.label));
-    });
+    this.filteredDocumentsSubject.next(
+      _.filter(documents, (document: PDF) => {
+        return new RegExp(year, 'i').test(document.label);
+      })
+    );
+
+    return this.filteredDocumentsSubject.getValue();
   }
 
   //   filterDocuments(searchTerm: string) {
