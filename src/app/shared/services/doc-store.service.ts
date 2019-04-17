@@ -50,14 +50,13 @@ export class DocStoreService {
           this.http.get(environment.mayorUrl, { params: params })
         ),
         tap((file: any) => this.documentSubject.next(file)),
-        tap(() =>
+        tap(() => {
           this.dataStoreService.filteredDocumentsSubject.next(
-            this.dataStoreService.filterDocumentsByTitle(
-              this.documentSubject.getValue(),
-              ''
-            )
-          )
-        ),
+            //   this.filterPDFs();
+            this.documentSubject.getValue()
+            //   ''
+          );
+        }),
         take(1)
       )
       .subscribe();
@@ -76,13 +75,14 @@ export class DocStoreService {
   }
 
   filterPDFs() {
-    const documents = this.dataStoreService.filterDocuments(
+    // const documents =
+    this.dataStoreService.filterDocuments(
       this.documentSubject.getValue(),
       this.dataStoreService.searchTermSubject.getValue(),
       this.dataStoreService.currentSelectedMonthSubject.getValue(),
       this.dataStoreService.currentSelectedYearSubject.getValue()
     );
 
-    this.dataStoreService.filteredDocumentsSubject.next(documents);
+    // this.dataStoreService.filteredDocumentsSubject.next(documents);
   }
 }

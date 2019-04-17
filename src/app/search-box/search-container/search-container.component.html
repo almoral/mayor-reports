@@ -36,6 +36,7 @@
 
     <mdc-search-button
       [liveFilter]="liveFilter"
+      [searchTerm]="titleFilter$ | async"
       (onUpdate)="updateTitleFilter()"
     >
     </mdc-search-button>

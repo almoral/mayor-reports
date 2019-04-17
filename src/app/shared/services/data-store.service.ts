@@ -19,6 +19,8 @@ export class DataStoreService {
   searchTermSubject = new BehaviorSubject('');
   searchTerm$ = this.searchTermSubject.asObservable();
 
+  documents: Array<PDF>;
+
   constructor() {}
 
   setMonthsSubject(month: string) {
@@ -50,16 +52,18 @@ export class DataStoreService {
 
   filterDocumentsByTitle(documents: PDF[], searchTerm?: string) {
     if (_.isEmpty(searchTerm)) {
-      return documents;
+      this.filteredDocumentsSubject.next(documents);
     }
 
-    return _.filter(documents, (document: PDF) => {
-      return new RegExp(searchTerm, 'i').test(document.label);
-    });
+    this.filteredDocumentsSubject.next(
+      _.filter(documents, (document: PDF) => {
+        return new RegExp(searchTerm, 'i').test(document.label);
+      })
+    );
   }
 
   filterDocumentsByMonth(documents: PDF[], month?: string) {
-    if (month.length === 0) {
+    if (!month) {
       return documents;
     }
 
@@ -70,7 +74,7 @@ export class DataStoreService {
   }
 
   filterDocumentsByYear(documents: PDF[], year?: string) {
-    if (year.length === 0) {
+    if (!year) {
       return documents;
     }
 

@@ -7,7 +7,7 @@ import {
   EventEmitter
 } from '@angular/core';
 import { Observable, combineLatest, BehaviorSubject, Subject } from 'rxjs';
-import { map, take, takeUntil, distinctUntilChanged } from 'rxjs/operators';
+import { map, take, takeUntil } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { MonthService } from '../../shared/services/month.service';
 
@@ -120,9 +120,7 @@ export class SearchContainerComponent implements OnInit, OnDestroy {
 
   //  This method is used by the search button and pressing enter on the textbox when liveFilter is set to false.
   updateTitleFilter() {
-    this.searchTerm$
-      .pipe(take(1))
-      .subscribe(searchTerm => this.onSetTitleFilter.emit(searchTerm));
+    this.onSetTitleFilter.emit(this.searchTermSubject.getValue());
   }
 
   // This method is used when liveFilter is set to true. It's a realtime filter.

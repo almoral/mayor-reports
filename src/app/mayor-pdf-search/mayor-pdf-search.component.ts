@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { DocStoreService } from '../shared/services/doc-store.service';
+import { DocStoreService, PDF } from '../shared/services/doc-store.service';
 import { Observable, of, from, BehaviorSubject } from 'rxjs';
 import { tap, map, take } from 'rxjs/operators';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { MonthService } from '../shared/services/month.service';
 import * as _ from 'lodash';
 import { DataStoreService } from '../shared/services/data-store.service';
+import { Option } from '../search-box/selected-filters/selected-filters.component';
 
 @Component({
   selector: 'mdc-mayor-pdf-search',
@@ -36,10 +37,11 @@ export class MayorPdfSearchComponent implements OnInit {
     this.currentSelectedMonth$ = this.dataStoreService.currentSelectedMonth$;
 
     this.files$ = this.dataStoreService.filteredDocuments$.pipe(
-      tap((data: object[]) => {
+      tap((data: PDF[]) => {
         if (!_.isNil(data) && data.length > 0) {
           this.ngxService.stop();
           this.getYearsFromResults(data);
+          this.dataStoreService.documents = data;
         }
       })
     );
@@ -69,7 +71,12 @@ export class MayorPdfSearchComponent implements OnInit {
   }
 
   setTitleFilter(searchTerm: string) {
-    this.documentService.setSearchTermSubject(searchTerm);
+    // this.documentService.setSearchTermSubject(searchTerm);
+
+    this.dataStoreService.filterDocumentsByTitle(
+      this.documentService.documentSubject.getValue(),
+      searchTerm
+    );
   }
 
   setMonthFilter(month: string) {
