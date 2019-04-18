@@ -99,9 +99,10 @@ export class MayorPdfSearchComponent implements OnInit {
     );
   }
 
+  filterDocuments(month?: string, year?: string) {}
+
   setMonthFilter(month: string) {
     let documents = [];
-
     if (!month) {
       documents = this.documentService.documentSubject.getValue().slice();
     } else {
@@ -114,12 +115,12 @@ export class MayorPdfSearchComponent implements OnInit {
     this.dataStoreService.setMonthsSubject(month);
 
     // Filtering the master list of results by month.
-    this.dataStoreService.filterDocumentsByMonth(documents, month);
+    // this.dataStoreService.filterDocumentsByMonth(documents, month);
+    this.dataStoreService.filterDocuments(documents, month, '');
   }
 
   setYearFilter(year: string) {
     let documents = [];
-
     if (!year) {
       documents = this.documentService.documentSubject.getValue().slice();
     } else {
@@ -132,6 +133,21 @@ export class MayorPdfSearchComponent implements OnInit {
     this.dataStoreService.setYearsSubject(year);
 
     // Filtering the master list of results by month.
-    this.dataStoreService.filterDocumentsByYear(documents, year);
+    // this.dataStoreService.filterDocumentsByYear(documents, year);
+    this.dataStoreService.filterDocuments(documents, '', year);
+  }
+
+  getDocuments(term: string): Array<PDF> {
+    let documents = [];
+
+    if (!term) {
+      documents = this.documentService.documentSubject.getValue().slice();
+    } else {
+      documents = this.dataStoreService.filteredDocumentsSubject
+        .getValue()
+        .slice();
+    }
+
+    return documents;
   }
 }

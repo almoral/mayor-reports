@@ -37,19 +37,14 @@ export class DataStoreService {
 
   // TODO: Figure out why the filters are removing all results.
 
-  filterDocuments(
-    documents: PDF[],
-    searchTerm?: string,
-    months?: string,
-    years?: string
-  ) {
+  filterDocuments(documents: PDF[], months?: string, years?: string) {
     this.filteredDocumentsSubject.next(
-      this.filterDocumentsByTitle(
+      this.filterDocumentsByYear(
         this.filterDocumentsByMonth(
-          this.filterDocumentsByYear(documents, years),
+          this.filteredDocumentsSubject.getValue(),
           months
         ),
-        searchTerm
+        years
       )
     );
   }
@@ -69,8 +64,9 @@ export class DataStoreService {
 
   filterDocumentsByMonth(documents: PDF[], month?: string) {
     if (!month) {
-      this.filteredDocumentsSubject.next(documents);
-      return this.filteredDocumentsSubject.getValue();
+      //   this.filteredDocumentsSubject.next(documents);
+      //   return this.filteredDocumentsSubject.getValue();
+      return documents;
     }
 
     this.filteredDocumentsSubject.next(
@@ -78,12 +74,15 @@ export class DataStoreService {
         return new RegExp(month, 'i').test(document.month);
       })
     );
+
+    return this.filteredDocumentsSubject.getValue();
   }
 
   filterDocumentsByYear(documents: PDF[], year?: string) {
     if (!year) {
-      this.filteredDocumentsSubject.next(documents);
-      return this.filteredDocumentsSubject.getValue();
+      //   this.filteredDocumentsSubject.next(documents);
+      //   return this.filteredDocumentsSubject.getValue();
+      return documents;
     }
 
     this.filteredDocumentsSubject.next(
@@ -91,6 +90,8 @@ export class DataStoreService {
         return new RegExp(year, 'i').test(document.year);
       })
     );
+
+    return this.filteredDocumentsSubject.getValue();
   }
 
   resetFilters(documents: Array<PDF>) {
