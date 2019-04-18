@@ -35,6 +35,8 @@ export class DataStoreService {
     this.searchTermSubject.next(searchTerm);
   }
 
+  // TODO: Figure out why the filters are removing all results.
+
   filterDocuments(
     documents: PDF[],
     searchTerm?: string,
@@ -99,4 +101,18 @@ export class DataStoreService {
     this.currentSelectedMonthSubject.next('');
     this.currentSelectedYearSubject.next('');
   }
+
+  //   filterDocuments(searchTerm: string) {
+  //     const documents = this.documentSubject.getValue();
+
+  //     if (_.isEmpty(searchTerm)) {
+  //       this.filteredDocumentsSubject.next(documents);
+  //     }
+
+  //     this.filteredDocumentsSubject.next(
+  //       _.filter(documents, (document: PDF) => {
+  //         return new RegExp(searchTerm, 'i').test(document.label);
+  //       })
+  //     );
+  //   }
 }

@@ -100,25 +100,38 @@ export class MayorPdfSearchComponent implements OnInit {
   }
 
   setMonthFilter(month: string) {
+    let documents = [];
+
+    if (!month) {
+      documents = this.documentService.documentSubject.getValue().slice();
+    } else {
+      documents = this.dataStoreService.filteredDocumentsSubject
+        .getValue()
+        .slice();
+    }
+
     // Adding the selected month to the selectedMonths array.
     this.dataStoreService.setMonthsSubject(month);
 
     // Filtering the master list of results by month.
-    this.dataStoreService.filterDocumentsByMonth(
-      this.documentService.documentSubject.getValue(),
-      month
-    );
+    this.dataStoreService.filterDocumentsByMonth(documents, month);
   }
 
-  // TODO: Figure out why the filters are removing all results.
   setYearFilter(year: string) {
+    let documents = [];
+
+    if (!year) {
+      documents = this.documentService.documentSubject.getValue().slice();
+    } else {
+      documents = this.dataStoreService.filteredDocumentsSubject
+        .getValue()
+        .slice();
+    }
+
     // Adding the selected month to the selectedMonths array.
     this.dataStoreService.setYearsSubject(year);
 
     // Filtering the master list of results by month.
-    this.dataStoreService.filterDocumentsByYear(
-      this.documentService.documentSubject.getValue(),
-      year
-    );
+    this.dataStoreService.filterDocumentsByYear(documents, year);
   }
 }
