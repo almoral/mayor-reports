@@ -6,7 +6,7 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { MonthService } from '../shared/services/month.service';
 import * as _ from 'lodash';
 import { DataStoreService } from '../shared/services/data-store.service';
-import { Option } from '../search-box/selected-filters/selected-filters.component';
+import { Option } from '../shared/interfaces/interfaces';
 
 @Component({
   selector: 'mdc-mayor-pdf-search',
@@ -21,7 +21,8 @@ export class MayorPdfSearchComponent implements OnInit {
   currentSelectedYear$: Observable<string>;
   currentSelectedMonth$: Observable<string>;
 
-  months = this.monthService.months;
+  monthsSubject = new BehaviorSubject<Option[]>([]);
+  months$ = this.monthsSubject.asObservable();
 
   constructor(
     private documentService: DocStoreService,
@@ -43,6 +44,7 @@ export class MayorPdfSearchComponent implements OnInit {
           this.getYearsFromResults(
             this.documentService.documentSubject.getValue()
           );
+          this.getMonthsFromService();
           this.dataStoreService.documents = data;
         }
       })
@@ -60,7 +62,8 @@ export class MayorPdfSearchComponent implements OnInit {
             arrayYears.push({
               label: year,
               value: year,
-              isDisabled: false
+              isDisabled: false,
+              isSelected: false
             });
           });
           if (arrayYears.length > 0) {
@@ -72,9 +75,24 @@ export class MayorPdfSearchComponent implements OnInit {
       .subscribe();
   }
 
-  setTitleFilter(searchTerm: string) {
-    // this.documentService.setSearchTermSubject(searchTerm);
+  getMonthsFromService() {
+    const months = this.monthService.months;
+    const arrayMonths = [];
+    months.map(month => {
+      arrayMonths.push({
+        label: month.label,
+        value: month.value,
+        isDisabled: false,
+        isSelected: false
+      });
+    });
 
+    if (arrayMonths.length > 0) {
+      this.monthsSubject.next(arrayMonths);
+    }
+  }
+
+  setTitleFilter(searchTerm: string) {
     this.dataStoreService.filterDocumentsByTitle(
       this.documentService.documentSubject.getValue(),
       searchTerm
@@ -82,23 +100,22 @@ export class MayorPdfSearchComponent implements OnInit {
   }
 
   setMonthFilter(month: string) {
-    // console.log('month filter: ', month);
-    // this.documentService.setMonthsSubject(month);
+    // Adding the selected month to the selectedMonths array.
+    this.dataStoreService.setMonthsSubject(month);
 
-    console.log(
-      'months docs: ',
-      this.documentService.documentSubject.getValue()
-    );
-
+    // Filtering the master list of results by month.
     this.dataStoreService.filterDocumentsByMonth(
       this.documentService.documentSubject.getValue(),
       month
     );
   }
 
+  // TODO: Figure out why the filters are removing all results.
   setYearFilter(year: string) {
-    // console.log('year filter: ', year);
-    // this.documentService.setYearsSubject(year);
+    // Adding the selected month to the selectedMonths array.
+    this.dataStoreService.setYearsSubject(year);
+
+    // Filtering the master list of results by month.
     this.dataStoreService.filterDocumentsByYear(
       this.documentService.documentSubject.getValue(),
       year
