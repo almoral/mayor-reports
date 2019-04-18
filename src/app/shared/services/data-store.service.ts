@@ -72,7 +72,7 @@ export class DataStoreService {
     // filter by intersecting months.
     this.filteredDocumentsSubject.next(
       _.filter(documents, (document: PDF) => {
-        return new RegExp(month, 'i').test(document.label);
+        return new RegExp(month, 'i').test(document.month);
       })
     );
 
@@ -87,7 +87,7 @@ export class DataStoreService {
     // filter by intersecting years.
     this.filteredDocumentsSubject.next(
       _.filter(documents, (document: PDF) => {
-        return new RegExp(year, 'i').test(document.label);
+        return new RegExp(year, 'i').test(document.year);
       })
     );
 

@@ -40,7 +40,9 @@ export class MayorPdfSearchComponent implements OnInit {
       tap((data: PDF[]) => {
         if (!_.isNil(data) && data.length > 0) {
           this.ngxService.stop();
-          this.getYearsFromResults(data);
+          this.getYearsFromResults(
+            this.documentService.documentSubject.getValue()
+          );
           this.dataStoreService.documents = data;
         }
       })
