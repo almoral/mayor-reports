@@ -1,20 +1,16 @@
 <div class="container">
-  <mdc-search-container
-    [textBoxPlaceholder]="'Enter Search Term'"
+  <mdc-search-container [textBoxPlaceholder]="'Enter Search Term'"
     [liveFilter]="false"
     [showFiltersButton]="true"
     (onSetTitleFilter)="setTitleFilter($event)"
-    (onSetCategoriesFilter)="setMonthFilter($event)"
-    (onSetTypesFilter)="setYearFilter($event)"
+    (onSetCategoriesFilter)="filterByMonth($event)"
+    (onSetTypesFilter)="filterByYear($event)"
     [years]="years$ | async"
     [currentSelectedTypes$]="currentSelectedYear$ | async"
-    [currentSelectedCategories$]="currentSelectedMonth$ | async"
-  ></mdc-search-container>
+    [currentSelectedCategories$]="currentSelectedMonth$ | async"></mdc-search-container>
 
-  <mdc-file-list
-    [fileList]="files$ | async"
+  <mdc-file-list [fileList]="files$ | async"
     [term]=""
     [selectedYear]=""
-    [selectedMonth]=""
-  ></mdc-file-list>
+    [selectedMonth]=""></mdc-file-list>
 </div>
