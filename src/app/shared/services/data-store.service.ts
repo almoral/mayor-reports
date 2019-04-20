@@ -41,7 +41,8 @@ export class DataStoreService {
     filterDocumentsByTitle(documents: PDF[], searchTerm?: string) {
         if (!searchTerm) {
             this.filteredDocumentsSubject.next(documents);
-            return this.filteredDocumentsSubject.getValue();
+            this.filterDocumentsByMonth(documents, '');
+            this.filterDocumentsByYear(documents, '');
         }
 
         this.filteredDocumentsSubject.next(
@@ -55,16 +56,18 @@ export class DataStoreService {
         // Determines whether or not the checkbox is checked.
         this.setMonthsSubject(month);
 
+        const filteredDocuments = _.filter(documents, (document: PDF) => {
+            return new RegExp(month, 'i').test(document.month);
+        });
+
         // If month is unchecked
         if (!month) {
-            // reset the documents.
-            // this.filteredDocumentsSubject.next(documents);
-
             // check if there's a selected year
             if (this.documentsByYearSubject.getValue().length > 0) {
                 // filter the documents by selected year.
                 this.filteredDocumentsSubject.next(this.documentsByYearSubject.getValue());
 
+                // Reset the documentsByMonthSubject
                 this.documentsByMonthSubject.next([]);
 
                 return;
@@ -73,37 +76,28 @@ export class DataStoreService {
 
         // check if there's a selected year
         if (this.documentsByYearSubject.getValue().length > 0) {
-            // filter the documents by selected year.
+            // filter the documentsByYearSubject values by month
             this.filteredDocumentsSubject.next(
                 _.filter(this.documentsByYearSubject.getValue(), (document: PDF) => {
                     return new RegExp(month, 'i').test(document.month);
                 })
             );
 
-            this.documentsByMonthSubject.next(
-                _.filter(documents, (document: PDF) => {
-                    return new RegExp(month, 'i').test(document.month);
-                })
-            );
+            this.documentsByMonthSubject.next(filteredDocuments);
 
             return;
-        } else {
-            this.documentsByMonthSubject.next(
-                _.filter(documents, (document: PDF) => {
-                    return new RegExp(month, 'i').test(document.month);
-                })
-            );
-
-            this.filteredDocumentsSubject.next(
-                _.filter(documents, (document: PDF) => {
-                    return new RegExp(month, 'i').test(document.month);
-                })
-            );
         }
+        this.documentsByMonthSubject.next(filteredDocuments);
+
+        this.filteredDocumentsSubject.next(this.documentsByMonthSubject.getValue());
     }
 
     filterDocumentsByYear(documents: PDF[], year?: string) {
         this.setYearsSubject(year);
+
+        const filteredDocuments = _.filter(documents, (document: PDF) => {
+            return new RegExp(year, 'i').test(document.year);
+        });
 
         if (!year) {
             this.filteredDocumentsSubject.next(documents);
@@ -127,27 +121,14 @@ export class DataStoreService {
                 })
             );
 
-            this.documentsByYearSubject.next(
-                _.filter(documents, (document: PDF) => {
-                    return new RegExp(year, 'i').test(document.year);
-                })
-            );
+            this.documentsByYearSubject.next(filteredDocuments);
 
             return;
-        } else {
         }
 
-        this.documentsByYearSubject.next(
-            _.filter(documents, (document: PDF) => {
-                return new RegExp(year, 'i').test(document.year);
-            })
-        );
+        this.documentsByYearSubject.next(filteredDocuments);
 
-        this.filteredDocumentsSubject.next(
-            _.filter(documents, (document: PDF) => {
-                return new RegExp(year, 'i').test(document.year);
-            })
-        );
+        this.filteredDocumentsSubject.next(this.documentsByYearSubject.getValue());
     }
 
     resetFilters(documents: Array<PDF>) {
