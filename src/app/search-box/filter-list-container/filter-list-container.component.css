@@ -21,9 +21,14 @@ FILTERS
   z-index: 100;
 }
 
-.search-filters :focus {
+/* .search-filters :focus {
   outline-offset: 4px;
   outline: 3px dotted #3bd1ff;
+} */
+
+.search-filters:focus {
+  outline-offset: 4px;
+  outline: #3bd1ff dotted 3px;
 }
 
 .search-filters-top {

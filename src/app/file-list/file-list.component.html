@@ -1,34 +1,42 @@
-<div class="file-list-component">
-  <ul class="file-list-component__list">
-    <li
-      *ngFor="
-        let file of (fileList
-          | paginate: { itemsPerPage: 10, currentPage: page })
-      "
-    >
-      <div *ngIf="file.showMessage" class="emptyResultsMessage message">
-        <p>
-          {{ file.showMessage }}
-        </p>
-      </div>
-      <div>
-        <a target="_blank" href="{{ file.filePath | fixUrl }}">{{
-          file.label
-        }}</a>
-        &nbsp;
-        <span *ngIf="file.fileSize">{{ file.fileSize }}</span>
-        &nbsp; Month released: {{ file.month }} &nbsp; Year released:
-        {{ file.year }}
-      </div>
-    </li>
-  </ul>
-</div>
+<ng-container *ngIf="fileList !== null && fileList.length > 0">
+  <div class="file-list-component">
+    <ul class="file-list-component__list">
+      <li
+        *ngFor="
+          let file of (fileList
+            | paginate: { itemsPerPage: 10, currentPage: page })
+        "
+      >
+        <div *ngIf="file.showMessage" class="emptyResultsMessage message">
+          <p>
+            {{ file.showMessage }}
+          </p>
+        </div>
 
-<div class="is-text-centered">
-  <mdc-pagination
-    [id]="'pagination'"
-    [maxSize]="7"
-    (pageChange)="page = $event"
-  >
-  </mdc-pagination>
-</div>
+        <div>
+          <a target="_blank" href="{{ file.filePath | fixUrl }}">{{
+            file.label
+          }}</a>
+          &nbsp;
+          <span *ngIf="file.fileSize">{{ file.fileSize }}</span>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="is-text-centered">
+    <mdc-pagination
+      [id]="'pagination'"
+      [maxSize]="7"
+      (pageChange)="page = $event"
+    >
+    </mdc-pagination>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="!fileList || fileList.length === 0">
+  {{ fileList }}
+  <div class="file-list-component">
+    <h2>There are no files to display at this time.</h2>
+  </div>
+</ng-container>
