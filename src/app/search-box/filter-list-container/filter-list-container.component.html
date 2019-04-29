@@ -42,7 +42,7 @@
     class="search-filters__container"
   >
     <!-- Start Types filter -->
-    <div class="search-filters__list">
+    <div class="search-filters__item">
       <mdc-filter-list
         [heading]="'Years'"
         [options]="types$"
@@ -67,7 +67,7 @@
   </div>
   <div class="search-filters__apply-container">
     <button
-      class="waves-effect wave-light btn btn-custom--blue search-filters__apply-button"
+      class="waves-effect wave-light btn btn-custom--gold search-filters__apply-button"
       type="button"
       (click)="showFilters()"
     >
