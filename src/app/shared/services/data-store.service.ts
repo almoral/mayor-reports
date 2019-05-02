@@ -1,142 +1,178 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { PDF } from './doc-store.service';
 import * as _ from 'lodash';
+import { take, map } from 'rxjs/operators';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class DataStoreService {
-    filteredDocumentsSubject = new BehaviorSubject<PDF[]>(null);
-    filteredDocuments$ = this.filteredDocumentsSubject.asObservable();
+  filteredDocumentsSubject = new BehaviorSubject<PDF[]>(null);
+  filteredDocuments$ = this.filteredDocumentsSubject.asObservable();
 
-    currentSelectedYearSubject = new BehaviorSubject('');
-    currentSelectedYear$ = this.currentSelectedYearSubject.asObservable();
+  currentSelectedYearSubject = new BehaviorSubject('');
+  currentSelectedYear$ = this.currentSelectedYearSubject.asObservable();
 
-    currentSelectedMonthSubject = new BehaviorSubject('');
-    currentSelectedMonth$ = this.currentSelectedMonthSubject.asObservable();
+  currentSelectedMonthSubject = new BehaviorSubject('');
+  currentSelectedMonth$ = this.currentSelectedMonthSubject.asObservable();
 
-    documentsByYearSubject = new BehaviorSubject<PDF[]>([]);
-    documentsByMonthSubject = new BehaviorSubject<PDF[]>([]);
+  documentsByYearSubject = new BehaviorSubject<PDF[]>([]);
+  documentsByMonthSubject = new BehaviorSubject<PDF[]>([]);
 
-    searchTermSubject = new BehaviorSubject('');
-    searchTerm$ = this.searchTermSubject.asObservable();
+  searchTermSubject = new BehaviorSubject('');
+  searchTerm$ = this.searchTermSubject.asObservable();
 
-    documents: Array<PDF>;
+  yearsSubject = new BehaviorSubject([]);
+  years$ = this.yearsSubject.asObservable();
 
-    constructor() {}
+  documentsSubject = new BehaviorSubject<PDF[]>([]);
+  documents$ = this.documentsSubject.asObservable();
 
-    setMonthsSubject(month: string) {
-        this.currentSelectedMonthSubject.next(month);
+  constructor() {
+    this.documents$.subscribe(document => this.getYearsFromResults(document));
+  }
+
+  getYearsFromResults(data: object[]) {
+    of(data)
+      .pipe(
+        // tap(data => console.log('document data: ', data)),
+        map(files => {
+          const years = _.compact(_.uniq(_.map(files, 'year')));
+          const arrayYears = [];
+          years.map(year => {
+            // Returning an object so the checkbox component gets the right shape.
+            arrayYears.push({
+              label: year,
+              value: year,
+              isDisabled: false,
+              isSelected: false
+            });
+          });
+          if (arrayYears.length > 0) {
+            this.yearsSubject.next(arrayYears);
+          }
+        }),
+        take(1)
+      )
+      .subscribe();
+  }
+
+  setMonthsSubject(month: string) {
+    this.currentSelectedMonthSubject.next(month);
+  }
+
+  setYearsSubject(year: string) {
+    this.currentSelectedYearSubject.next(year);
+  }
+
+  setSearchTermSubject(searchTerm: string) {
+    this.searchTermSubject.next(searchTerm);
+  }
+
+  filterDocumentsByTitle(documents: PDF[], searchTerm?: string) {
+    if (!searchTerm) {
+      this.filteredDocumentsSubject.next(documents);
+      this.filterDocumentsByMonth(documents, '');
+      this.filterDocumentsByYear(documents, '');
     }
 
-    setYearsSubject(year: string) {
-        this.currentSelectedYearSubject.next(year);
-    }
+    this.filteredDocumentsSubject.next(
+      _.filter(documents, (document: PDF) => {
+        return new RegExp(searchTerm, 'i').test(document.label);
+      })
+    );
+  }
 
-    setSearchTermSubject(searchTerm: string) {
-        this.searchTermSubject.next(searchTerm);
-    }
+  filterDocumentsByMonth(documents: PDF[], month?: string) {
+    // Determines whether or not the checkbox is checked.
+    this.setMonthsSubject(month);
 
-    filterDocumentsByTitle(documents: PDF[], searchTerm?: string) {
-        if (!searchTerm) {
-            this.filteredDocumentsSubject.next(documents);
-            this.filterDocumentsByMonth(documents, '');
-            this.filterDocumentsByYear(documents, '');
-        }
+    const filteredDocuments = _.filter(documents, (document: PDF) => {
+      return new RegExp(month, 'i').test(document.month);
+    });
 
+    // If month is unchecked
+    if (!month) {
+      // check if there's a selected year
+      if (this.documentsByYearSubject.getValue().length > 0) {
+        // filter the documents by selected year.
         this.filteredDocumentsSubject.next(
-            _.filter(documents, (document: PDF) => {
-                return new RegExp(searchTerm, 'i').test(document.label);
-            })
+          this.documentsByYearSubject.getValue()
         );
+
+        // Reset the documentsByMonthSubject
+        this.documentsByMonthSubject.next([]);
+
+        return;
+      }
     }
 
-    filterDocumentsByMonth(documents: PDF[], month?: string) {
-        // Determines whether or not the checkbox is checked.
-        this.setMonthsSubject(month);
+    // check if there's a selected year
+    if (this.documentsByYearSubject.getValue().length > 0) {
+      // filter the documentsByYearSubject values by month
+      this.filteredDocumentsSubject.next(
+        _.filter(this.documentsByYearSubject.getValue(), (document: PDF) => {
+          return new RegExp(month, 'i').test(document.month);
+        })
+      );
 
-        const filteredDocuments = _.filter(documents, (document: PDF) => {
-            return new RegExp(month, 'i').test(document.month);
-        });
+      this.documentsByMonthSubject.next(filteredDocuments);
 
-        // If month is unchecked
-        if (!month) {
-            // check if there's a selected year
-            if (this.documentsByYearSubject.getValue().length > 0) {
-                // filter the documents by selected year.
-                this.filteredDocumentsSubject.next(this.documentsByYearSubject.getValue());
+      return;
+    }
+    this.documentsByMonthSubject.next(filteredDocuments);
 
-                // Reset the documentsByMonthSubject
-                this.documentsByMonthSubject.next([]);
+    this.filteredDocumentsSubject.next(this.documentsByMonthSubject.getValue());
+  }
 
-                return;
-            }
-        }
+  filterDocumentsByYear(documents: PDF[], year?: string) {
+    this.setYearsSubject(year);
 
-        // check if there's a selected year
-        if (this.documentsByYearSubject.getValue().length > 0) {
-            // filter the documentsByYearSubject values by month
-            this.filteredDocumentsSubject.next(
-                _.filter(this.documentsByYearSubject.getValue(), (document: PDF) => {
-                    return new RegExp(month, 'i').test(document.month);
-                })
-            );
+    const filteredDocuments = _.filter(documents, (document: PDF) => {
+      return new RegExp(year, 'i').test(document.year);
+    });
 
-            this.documentsByMonthSubject.next(filteredDocuments);
+    if (!year) {
+      this.filteredDocumentsSubject.next(documents);
 
-            return;
-        }
-        this.documentsByMonthSubject.next(filteredDocuments);
+      // check if there's a selected year
+      if (this.documentsByMonthSubject.getValue().length > 0) {
+        this.filteredDocumentsSubject.next(
+          this.documentsByMonthSubject.getValue()
+        );
 
-        this.filteredDocumentsSubject.next(this.documentsByMonthSubject.getValue());
+        this.documentsByYearSubject.next([]);
+
+        return;
+      }
     }
 
-    filterDocumentsByYear(documents: PDF[], year?: string) {
-        this.setYearsSubject(year);
+    // If there documents are filtered by month.
+    if (this.documentsByMonthSubject.getValue().length > 0) {
+      // filter the documents by selected year.
+      this.filteredDocumentsSubject.next(
+        _.filter(this.documentsByMonthSubject.getValue(), (document: PDF) => {
+          return new RegExp(year, 'i').test(document.year);
+        })
+      );
 
-        const filteredDocuments = _.filter(documents, (document: PDF) => {
-            return new RegExp(year, 'i').test(document.year);
-        });
+      this.documentsByYearSubject.next(filteredDocuments);
 
-        if (!year) {
-            this.filteredDocumentsSubject.next(documents);
-
-            // check if there's a selected year
-            if (this.documentsByMonthSubject.getValue().length > 0) {
-                this.filteredDocumentsSubject.next(this.documentsByMonthSubject.getValue());
-
-                this.documentsByYearSubject.next([]);
-
-                return;
-            }
-        }
-
-        // If there documents are filtered by month.
-        if (this.documentsByMonthSubject.getValue().length > 0) {
-            // filter the documents by selected year.
-            this.filteredDocumentsSubject.next(
-                _.filter(this.documentsByMonthSubject.getValue(), (document: PDF) => {
-                    return new RegExp(year, 'i').test(document.year);
-                })
-            );
-
-            this.documentsByYearSubject.next(filteredDocuments);
-
-            return;
-        }
-
-        this.documentsByYearSubject.next(filteredDocuments);
-
-        this.filteredDocumentsSubject.next(this.documentsByYearSubject.getValue());
+      return;
     }
 
-    resetFilters(documents: Array<PDF>) {
-        this.filterDocumentsByMonth(documents, '');
-        this.filterDocumentsByYear(documents, '');
-        this.filterDocumentsByTitle(documents, '');
+    this.documentsByYearSubject.next(filteredDocuments);
 
-        this.currentSelectedMonthSubject.next('');
-        this.currentSelectedYearSubject.next('');
-    }
+    this.filteredDocumentsSubject.next(this.documentsByYearSubject.getValue());
+  }
+
+  resetFilters(documents: Array<PDF>) {
+    this.filterDocumentsByMonth(documents, '');
+    this.filterDocumentsByYear(documents, '');
+    this.filterDocumentsByTitle(documents, '');
+
+    this.currentSelectedMonthSubject.next('');
+    this.currentSelectedYearSubject.next('');
+  }
 }

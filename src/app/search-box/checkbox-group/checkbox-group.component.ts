@@ -23,7 +23,10 @@ export class CheckboxGroupComponent implements OnInit {
 
   selectOption(event: any) {
     // If the selected option is in the selectedOptions array, then remove it from the array and reset the documents.
-    if (this.currentSelectedOptions.indexOf(event.target.value) !== -1) {
+    if (
+      !_.isNil(this.currentSelectedOptions) &&
+      this.currentSelectedOptions.indexOf(event.target.value) !== -1
+    ) {
       _.remove(
         this.currentSelectedOptions,
         selectedOption => selectedOption === event.target.value

@@ -43,18 +43,14 @@
 
     <!-- This is the search button with icon. I'm leaving this in case Jaime decides she wants it. -->
   </div>
-  <!-- <mdc-month-selector [months]="months"></mdc-month-selector>
-
-  <mdc-year-selector [years]="years"></mdc-year-selector> -->
 </div>
 
-<!-- <mdc-selected-filters
-  [combinedFilters$]="combinedFilters$"
-  [selectedFilters$]="selectedFilters$"
+<mdc-selected-filters
+  [selectedFilters]="selectedFilters$ | async"
   (onRemoveFilter)="removeFilter($event)"
   (onClearFilters)="clearFilters()"
 >
-</mdc-selected-filters> -->
+</mdc-selected-filters>
 
 <!-- Show Filters Button -->
 <mdc-show-filters

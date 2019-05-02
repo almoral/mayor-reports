@@ -1,22 +1,38 @@
-<ng-container *ngIf="(filterOptions$ | async).length > 0">
-  <section role="region" aria-labelledby="selectedFiltersTitle" class="selected-filters">
-    <h2 id="selectedFiltersTitle" class="selected-filters__main-title">Selected Filters</h2>
+test filter: {{ filterOptions$ | async }}
 
-<ng-container *ngIf="filterOptions$ | async as options">
-<div *ngFor="let option of options"
-  (click)="removeFilter(option.value)"
-  class="chip selected-filters--blue"
+<ng-container *ngIf="(filterOptions$ | async)?.length > 0">
+  <section
+    role="region"
+    aria-labelledby="selectedFiltersTitle"
+    class="selected-filters"
   >
-  {{option.label}}
-  <button
-    type="button"
-    (click)="removeFilter(option.value)"
-    class="selected-filters__clear-current"
-    aria-label="Clear Filter">
-      <span aria-hidden="true">X</span>
-  </button>
-</div>
-</ng-container>
-    <button type="button" (click)="clearFilters()" class="selected-filters__clear-all">Clear Filters</button>
+    <h2 id="selectedFiltersTitle" class="selected-filters__main-title">
+      Selected Filters
+    </h2>
+
+    <ng-container *ngIf="filterOptions$ | async as options">
+      <div
+        *ngFor="let option of options"
+        (click)="removeFilter(option.value)"
+        class="chip selected-filters--blue"
+      >
+        {{ option.label }}
+        <button
+          type="button"
+          (click)="removeFilter(option.value)"
+          class="selected-filters__clear-current"
+          aria-label="Clear Filter"
+        >
+          <span aria-hidden="true">X</span>
+        </button>
+      </div>
+    </ng-container>
+    <button
+      type="button"
+      (click)="clearFilters()"
+      class="selected-filters__clear-all"
+    >
+      Clear Filters
+    </button>
   </section>
 </ng-container>

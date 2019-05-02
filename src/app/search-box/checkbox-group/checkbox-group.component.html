@@ -6,7 +6,10 @@
     id="{{ option.value }}"
     name="{{ option.value }}"
     value="{{ option.value }}"
-    [checked]="currentSelectedOptions.indexOf(option.value) !== -1"
+    [checked]="
+      currentSelectedOptions !== null &&
+      currentSelectedOptions.indexOf(option.value) !== -1
+    "
     (click)="selectOption($event)"
   />
   <label for="{{ option.value }}">{{ option.label }}</label>

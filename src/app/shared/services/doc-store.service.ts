@@ -49,7 +49,10 @@ export class DocStoreService {
         switchMap((params: Params) =>
           this.http.get(environment.mayorUrl, { params: params })
         ),
-        tap((file: any) => this.documentSubject.next(file)),
+        tap((file: any) => {
+          this.documentSubject.next(file);
+          this.dataStoreService.documentsSubject.next(file);
+        }),
         tap(() => {
           this.dataStoreService.filteredDocumentsSubject.next(
             this.documentSubject.getValue()

@@ -7,11 +7,12 @@
     (onSetCategoriesFilter)="filterByMonth($event)"
     (onSetTypesFilter)="filterByYear($event)"
     [years]="years$ | async"
+    [months]="months$ | async"
     [currentSelectedTypes$]="currentSelectedYear$ | async"
     [currentSelectedCategories$]="currentSelectedMonth$ | async"
   ></mdc-search-container>
 
-  <ng-container *ngIf="(files$ | async) as files">
+  <ng-container *ngIf="files$ | async as files">
     <mdc-file-list
       [fileList]="files"
       [term]=""

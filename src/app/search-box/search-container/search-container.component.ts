@@ -7,9 +7,10 @@ import {
   EventEmitter
 } from '@angular/core';
 import { Observable, combineLatest, BehaviorSubject, Subject } from 'rxjs';
-import { map, take, takeUntil } from 'rxjs/operators';
+import { map, take, takeUntil, tap } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { MonthService } from '../../shared/services/month.service';
+import { DataStoreService } from '../../shared/services/data-store.service';
 
 @Component({
   selector: 'mdc-search-container',
@@ -17,7 +18,10 @@ import { MonthService } from '../../shared/services/month.service';
   styleUrls: ['./search-container.component.css']
 })
 export class SearchContainerComponent implements OnInit, OnDestroy {
-  constructor(private monthService: MonthService) {}
+  constructor(
+    private monthService: MonthService,
+    private dataStoreService: DataStoreService
+  ) {}
 
   showFiltersToggle = false;
 
@@ -25,6 +29,7 @@ export class SearchContainerComponent implements OnInit, OnDestroy {
   // We're using the smart container dumb component approach.
 
   @Input() years: any;
+  @Input() months: any;
 
   @Input() textBoxPlaceholder: string;
   @Input() titleFilter$: string;
@@ -41,7 +46,8 @@ export class SearchContainerComponent implements OnInit, OnDestroy {
   @Output() onSetCategoriesFilter = new EventEmitter();
   @Output() onSetTitleFilter = new EventEmitter();
 
-  months = this.monthService.months;
+  currentSelectedMonth$ = this.dataStoreService.currentSelectedMonth$;
+  currentSelectedYear$ = this.dataStoreService.currentSelectedYear$;
 
   selectedFilters$: Observable<Array<Object>>;
   combinedFilters$: Observable<Array<Object>>;
@@ -62,17 +68,17 @@ export class SearchContainerComponent implements OnInit, OnDestroy {
     });
 
     // Combining the different filter types to create a master list of filters to populate the chips.
-    this.combinedFilters$ = combineLatest(this.types$, this.categories$).pipe(
-      map(([types, categories]) => [...types, ...categories])
+    this.combinedFilters$ = combineLatest(this.months, this.years).pipe(
+      tap(([types, categories]) =>
+        console.log('types and categories: ', types, categories)
+      )
+      //   map(([types, categories]) => [...types, ...categories])
     );
 
     // Combining the different filter types to create a list of selected filters to populate the chips.
     this.selectedFilters$ = combineLatest(
-      this.currentSelectedTypes$,
-      this.currentSelectedCategories$
-    ).pipe(
-      // Flattening the arrays... this is so pretty.
-      map(([types, categories]) => [...types, ...categories])
+      this.currentSelectedYear$,
+      this.currentSelectedMonth$
     );
   }
 
