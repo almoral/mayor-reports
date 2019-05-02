@@ -15,7 +15,7 @@ export interface Option {
 })
 export class SelectedFiltersComponent implements OnInit {
   //   @Input() combinedFilters$: Observable<Array<Option>>;
-  @Input() selectedFilters: Array<Option | string>;
+  @Input() selectedFilters$: Observable<Array<Option | string>>;
 
   @Output() onRemoveFilter = new EventEmitter();
   @Output() onClearFilters = new EventEmitter();
@@ -25,12 +25,14 @@ export class SelectedFiltersComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    // Check if the selected filters are an array of empty strings... this is weird.
-    this.selectedFilters.map(option => {
-      if (option !== '') {
-        this.filterOptions$ = of(this.selectedFilters);
-      }
-    });
+    // Check if the selected filters are an array of empty strings
+    // this.selectedFilters.map(option => {
+    //   if (option !== '') {
+    //     this.filterOptions$ = of(this.selectedFilters);
+    //   }
+    // });
+
+    this.filterOptions$ = this.selectedFilters$;
   }
 
   matchTags(tagsList: Array<Option>, selectedTags: Array<Option>) {

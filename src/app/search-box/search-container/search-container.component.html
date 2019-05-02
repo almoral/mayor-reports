@@ -46,7 +46,7 @@
 </div>
 
 <mdc-selected-filters
-  [selectedFilters]="selectedFilters$ | async"
+  [selectedFilters$]="selectedFilters$"
   (onRemoveFilter)="removeFilter($event)"
   (onClearFilters)="clearFilters()"
 >
