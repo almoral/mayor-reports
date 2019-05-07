@@ -3,6 +3,7 @@ import { BehaviorSubject, of } from 'rxjs';
 import { PDF } from './doc-store.service';
 import * as _ from 'lodash';
 import { take, map } from 'rxjs/operators';
+import { MonthService } from './month.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,10 +27,12 @@ export class DataStoreService {
   yearsSubject = new BehaviorSubject([]);
   years$ = this.yearsSubject.asObservable();
 
+  months$ = of(this.monthService.months);
+
   documentsSubject = new BehaviorSubject<PDF[]>([]);
   documents$ = this.documentsSubject.asObservable();
 
-  constructor() {
+  constructor(private monthService: MonthService) {
     this.documents$.subscribe(document => this.getYearsFromResults(document));
   }
 

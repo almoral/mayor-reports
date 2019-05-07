@@ -6,8 +6,8 @@
     (onSetTitleFilter)="setTitleFilter($event)"
     (onSetCategoriesFilter)="filterByMonth($event)"
     (onSetTypesFilter)="filterByYear($event)"
-    [years]="years$ | async"
-    [months]="months$ | async"
+    [years]="years$"
+    [months]="months$"
     [currentSelectedTypes$]="currentSelectedYear$ | async"
     [currentSelectedCategories$]="currentSelectedMonth$ | async"
   ></mdc-search-container>

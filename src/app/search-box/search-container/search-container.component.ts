@@ -68,12 +68,7 @@ export class SearchContainerComponent implements OnInit, OnDestroy {
     });
 
     // Combining the different filter types to create a master list of filters to populate the chips.
-    this.combinedFilters$ = combineLatest(this.months, this.years).pipe(
-      tap(([types, categories]) =>
-        console.log('types and categories: ', types, categories)
-      )
-      //   map(([types, categories]) => [...types, ...categories])
-    );
+    this.combinedFilters$ = combineLatest(this.months, this.years);
 
     // Combining the different filter types to create a list of selected filters to populate the chips.
     this.selectedFilters$ = combineLatest(

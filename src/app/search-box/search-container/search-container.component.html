@@ -12,8 +12,8 @@
     <!-- Filter Container -->
     <mdc-filter-list-container
       [showFiltersToggle]="showFiltersToggle"
-      [types$]="years"
-      [categories$]="months"
+      [types$]="years | async"
+      [categories$]="months | async"
       [currentSelectedCategories$]="currentSelectedCategories$"
       [currentSelectedTypes$]="currentSelectedTypes$"
       (onShowFilters)="showFilters($event)"
@@ -46,6 +46,7 @@
 </div>
 
 <mdc-selected-filters
+  [combinedFilters$]="combinedFilters$"
   [selectedFilters$]="selectedFilters$"
   (onRemoveFilter)="removeFilter($event)"
   (onClearFilters)="clearFilters()"

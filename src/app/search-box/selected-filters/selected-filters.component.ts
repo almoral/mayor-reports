@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { combineLatest, Observable, of } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { combineLatest, Observable, of, from } from 'rxjs';
+import { map, filter, tap, switchMap } from 'rxjs/operators';
 import * as _ from 'lodash';
 
-export interface Option {
+export interface FilterOption {
   value: string;
   label: string;
 }
@@ -14,34 +14,79 @@ export interface Option {
   styleUrls: ['./selected-filters.component.css']
 })
 export class SelectedFiltersComponent implements OnInit {
-  //   @Input() combinedFilters$: Observable<Array<Option>>;
-  @Input() selectedFilters$: Observable<Array<Option | string>>;
+  @Input() combinedFilters$: Observable<Array<FilterOption>>;
+  @Input() selectedFilters$: Observable<Array<string>>;
 
   @Output() onRemoveFilter = new EventEmitter();
   @Output() onClearFilters = new EventEmitter();
 
-  filterOptions$: Observable<Array<Option | string>>;
+  years = null;
+  months = null;
+
+  filterOptions$: Observable<Array<any>>;
 
   constructor() {}
 
   ngOnInit() {
-    // Check if the selected filters are an array of empty strings
-    // this.selectedFilters.map(option => {
-    //   if (option !== '') {
-    //     this.filterOptions$ = of(this.selectedFilters);
-    //   }
-    // });
+    // Combine the combinedfilters with the selectedfilters to pass them to matchTags.
 
-    this.filterOptions$ = this.selectedFilters$;
+    this.years = this.combinedFilters$
+      .pipe(
+        // map((filters) => years = filters[0])
+        map(filters => {
+          return _.reduce(
+            filters[1],
+            (acc, filter) => {
+              acc[filter.value] = filter;
+              return acc;
+            },
+            {}
+          );
+        })
+      )
+      .subscribe();
+
+    this.months = this.combinedFilters$.pipe(
+      map(filters => {
+        return _.reduce(
+          filters[0],
+          (acc, filter) => {
+            acc[filter.value] = filter;
+            return acc;
+          },
+          {}
+        );
+      })
+    );
+    //   .subscribe();
+
+    this.filterOptions$ = this.selectedFilters$.pipe(
+      switchMap(selection => {
+        let options = [];
+        selection.map(option => {
+          console.log('option: ', this.months);
+          if (this.months[option]) {
+            options.push(this.months[option]);
+          }
+
+          if (this.years[option]) {
+            options.push(this.years[option]);
+          }
+          console.log('options array: ', options);
+        });
+        return options;
+      })
+    );
   }
 
-  matchTags(tagsList: Array<Option>, selectedTags: Array<Option>) {
+  matchTags(tagsList, selectedTags) {
     return _.transform(
       tagsList,
       (result, option, key) => {
         _.map(selectedTags, selectedTag => {
           if (selectedTag === option.value) {
             result.push(option);
+            return result;
           }
         });
       },

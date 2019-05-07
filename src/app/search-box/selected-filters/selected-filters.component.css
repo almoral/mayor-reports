@@ -10,14 +10,14 @@
 }
 
 .selected-filters--blue {
-  background-color: #027abb;
+  background-color: #baa20a;
   color: #fff;
   transition: 0.2s ease-out;
 }
 
 .selected-filters--blue:hover,
 .selected-filters--blue:focus {
-  background-color: #03a9f4;
+  background-color: #baa20a;
   cursor: pointer;
 }
 

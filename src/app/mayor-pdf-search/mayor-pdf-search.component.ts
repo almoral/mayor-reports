@@ -15,11 +15,10 @@ import { DataStoreService } from '../shared/services/data-store.service';
 export class MayorPdfSearchComponent implements OnInit {
   files$: Observable<object>;
   years$ = this.dataStoreService.years$;
+  months$ = this.dataStoreService.months$;
 
   currentSelectedYear$: Observable<string>;
   currentSelectedMonth$: Observable<string>;
-
-  months$ = of(this.monthService.months);
 
   constructor(
     private documentService: DocStoreService,
