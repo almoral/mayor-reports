@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { combineLatest, Observable, of, from } from 'rxjs';
-import { map, filter, tap, switchMap } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { map, filter, switchMap, tap } from 'rxjs/operators';
 import * as _ from 'lodash';
 
 export interface FilterOption {
@@ -22,30 +22,28 @@ export class SelectedFiltersComponent implements OnInit {
 
   years = null;
   months = null;
+  displayItem = false;
 
   filterOptions$: Observable<Array<any>>;
 
   constructor() {}
 
   ngOnInit() {
-    // Combine the combinedfilters with the selectedfilters to pass them to matchTags.
+    // Creating a map for the list of years. I'm using the value to create the keys.
+    this.years = this.combinedFilters$.pipe(
+      map(filters => {
+        return _.reduce(
+          filters[1],
+          (acc, filter) => {
+            acc[filter.value] = filter;
+            return acc;
+          },
+          {}
+        );
+      })
+    );
 
-    this.years = this.combinedFilters$
-      .pipe(
-        // map((filters) => years = filters[0])
-        map(filters => {
-          return _.reduce(
-            filters[1],
-            (acc, filter) => {
-              acc[filter.value] = filter;
-              return acc;
-            },
-            {}
-          );
-        })
-      )
-      .subscribe();
-
+    // Creating a map for the list of months. I'm using the value to create the keys.
     this.months = this.combinedFilters$.pipe(
       map(filters => {
         return _.reduce(
@@ -58,39 +56,34 @@ export class SelectedFiltersComponent implements OnInit {
         );
       })
     );
-    //   .subscribe();
 
-    this.filterOptions$ = this.selectedFilters$.pipe(
-      switchMap(selection => {
-        let options = [];
-        selection.map(option => {
-          console.log('option: ', this.months);
-          if (this.months[option]) {
-            options.push(this.months[option]);
-          }
-
-          if (this.years[option]) {
-            options.push(this.years[option]);
-          }
-          console.log('options array: ', options);
-        });
-        return options;
-      })
+    // Combining the months and years maps to create a new map.
+    const monthsAndYearsMap$ = combineLatest(this.months, this.years).pipe(
+      filter(values => !_.isNil(values))
     );
-  }
 
-  matchTags(tagsList, selectedTags) {
-    return _.transform(
-      tagsList,
-      (result, option, key) => {
-        _.map(selectedTags, selectedTag => {
-          if (selectedTag === option.value) {
-            result.push(option);
-            return result;
+    // Getting the values to display for the chips from the new map.
+    this.filterOptions$ = this.selectedFilters$.pipe(
+      // Displaying the chips section only if there is something to display.
+      tap(selection => {
+        for (let i = 0; i < 1; i++) {
+          if (selection[i].length > 0 || selection[i + 1].length > 0) {
+            this.displayItem = true;
+          } else {
+            this.displayItem = false;
           }
-        });
-      },
-      []
+        }
+      }),
+      // Using switchmap to get the value from selectedFilters$ and pass it to  monthsAndYearsMap$.
+      switchMap(selection => {
+        return monthsAndYearsMap$.pipe(
+          map(([months, years]) => {
+            const options = [];
+            options.push(years[selection[0]], months[selection[1]]);
+            return options;
+          })
+        );
+      })
     );
   }
 
