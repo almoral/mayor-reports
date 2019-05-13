@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { switchMap, tap, take } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
@@ -46,9 +46,16 @@ export class DocStoreService {
   requestPdfs() {
     this.route.queryParams
       .pipe(
-        switchMap((params: Params) =>
-          this.http.get(environment.mayorUrl, { params: params })
-        ),
+        switchMap((params: Params) => {
+          const parameters = new HttpParams();
+          parameters.append('folder', environment.targetFolder);
+          _.map(params, param => {
+            console.log('single param: ', param);
+            return parameters.append('' + param.key + '', param.value);
+          });
+          console.log('params: ', parameters);
+          return this.http.get(environment.mayorUrl, { params: params });
+        }),
         tap((file: any) => {
           this.documentSubject.next(file);
           this.dataStoreService.documentsSubject.next(file);
