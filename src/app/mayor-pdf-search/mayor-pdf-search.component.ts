@@ -17,9 +17,6 @@ export class MayorPdfSearchComponent implements OnInit {
   years$ = this.dataStoreService.years$;
   months$ = this.dataStoreService.months$;
 
-  currentSelectedYear$: Observable<string>;
-  currentSelectedMonth$: Observable<string>;
-
   constructor(
     private documentService: DocStoreService,
     private ngxService: NgxUiLoaderService,
@@ -29,9 +26,6 @@ export class MayorPdfSearchComponent implements OnInit {
 
   ngOnInit() {
     this.ngxService.start();
-
-    this.currentSelectedYear$ = this.dataStoreService.currentSelectedYear$;
-    this.currentSelectedMonth$ = this.dataStoreService.currentSelectedMonth$;
 
     this.files$ = this.dataStoreService.filteredDocuments$.pipe(
       tap((data: PDF[]) => {

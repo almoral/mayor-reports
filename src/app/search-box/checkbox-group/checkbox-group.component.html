@@ -7,7 +7,7 @@
     name="{{ option.value }}"
     value="{{ option.value }}"
     [checked]="
-      currentSelectedOptions !== null &&
+      currentSelectedOptions &&
       currentSelectedOptions.indexOf(option.value) !== -1
     "
     (click)="selectOption($event)"

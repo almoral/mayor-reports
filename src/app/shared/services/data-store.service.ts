@@ -39,7 +39,6 @@ export class DataStoreService {
   getYearsFromResults(data: object[]) {
     of(data)
       .pipe(
-        // tap(data => console.log('document data: ', data)),
         map(files => {
           const years = _.compact(_.uniq(_.map(files, 'year')));
           const arrayYears = [];

@@ -11,7 +11,7 @@
     <div class="search-filters__list">
       <mdc-checkbox-group
         [options]="options"
-        [currentSelectedOptions]="currentSelectedOptions"
+        [currentSelectedOptions]="currentSelectedOptions | async"
         (optionsSelected)="onOptionsSelected($event)"
       >
       </mdc-checkbox-group>

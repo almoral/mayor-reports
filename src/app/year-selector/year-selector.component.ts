@@ -16,7 +16,6 @@ export class YearSelectorComponent implements OnInit {
   constructor() {}
 
   onChange(selectedValue: string) {
-    //console.log('selected value: ', selectedValue);
     this.select.emit(selectedValue);
   }
 
