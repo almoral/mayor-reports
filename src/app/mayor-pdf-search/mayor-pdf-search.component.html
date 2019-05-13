@@ -1,23 +1,19 @@
 <div class="container">
-  <mdc-search-container
-    [textBoxPlaceholder]="'Enter Search Term'"
+  <mdc-search-container [textBoxPlaceholder]="'Enter Search Term'"
     [liveFilter]="false"
     [showFiltersButton]="true"
     (onSetTitleFilter)="setTitleFilter($event)"
-    (onSetCategoriesFilter)="filterByMonth($event)"
-    (onSetTypesFilter)="filterByYear($event)"
+    (setMonthFilter)="filterByMonth($event)"
+    (setYearFilter)="filterByYear($event)"
     [years]="years$"
     [months]="months$"
-    [currentSelectedTypes$]="currentSelectedYear$ | async"
-    [currentSelectedCategories$]="currentSelectedMonth$ | async"
-  ></mdc-search-container>
+    [currentSelectedYearSubject]="currentSelectedYear$ | async"
+    [currentSelectedMonthSubject]="currentSelectedMonth$ | async"></mdc-search-container>
 
   <ng-container *ngIf="files$ | async as files">
-    <mdc-file-list
-      [fileList]="files"
+    <mdc-file-list [fileList]="files"
       [term]=""
       [selectedYear]=""
-      [selectedMonth]=""
-    ></mdc-file-list>
+      [selectedMonth]=""></mdc-file-list>
   </ng-container>
 </div>
