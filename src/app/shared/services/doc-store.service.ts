@@ -52,9 +52,13 @@ export class DocStoreService {
         switchMap((params: Params) => {
           // If there's a target folder defined in the component then pass that value a a query parameter.
           if (environment.targetFolder) {
+            console.log('this route: ', this.route.snapshot.url);
+
             const urlTree = this.router.createUrlTree([], {
               relativeTo: this.route,
-              queryParams: { folder: environment.targetFolder },
+              queryParams: {
+                folder: environment.targetFolder
+              },
               queryParamsHandling: 'merge',
               skipLocationChange: true
             });
@@ -65,7 +69,7 @@ export class DocStoreService {
                 filter(event => event instanceof NavigationEnd),
                 take(1)
               )
-              .subscribe(() => this.location.replaceState(''));
+              .subscribe(() => this.location.replaceState(this.router.url));
           }
           return this.http.get(environment.mayorUrl, { params: params });
         })
