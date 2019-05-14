@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
+import { Location } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, filter, take } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router, NavigationEnd } from '@angular/router';
 import * as _ from 'lodash';
 import { DataStoreService } from './data-store.service';
 
@@ -39,7 +40,8 @@ export class DocStoreService {
     private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
-    private dataStoreService: DataStoreService
+    private dataStoreService: DataStoreService,
+    private location: Location
   ) {
     this.requestPdfs();
   }
@@ -50,11 +52,20 @@ export class DocStoreService {
         switchMap((params: Params) => {
           // If there's a target folder defined in the component then pass that value a a query parameter.
           if (environment.targetFolder) {
-            this.router.navigate([], {
+            const urlTree = this.router.createUrlTree([], {
               relativeTo: this.route,
               queryParams: { folder: environment.targetFolder },
-              queryParamsHandling: 'merge'
+              queryParamsHandling: 'merge',
+              skipLocationChange: true
             });
+
+            this.router.navigateByUrl(urlTree);
+            this.router.events
+              .pipe(
+                filter(event => event instanceof NavigationEnd),
+                take(1)
+              )
+              .subscribe(() => this.location.replaceState(''));
           }
           return this.http.get(environment.mayorUrl, { params: params });
         })
