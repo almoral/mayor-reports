@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { switchMap, tap, take } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { DataStoreService } from './data-store.service';
 
@@ -38,6 +38,7 @@ export class DocStoreService {
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
+    private router: Router,
     private dataStoreService: DataStoreService
   ) {
     this.requestPdfs();
@@ -47,27 +48,24 @@ export class DocStoreService {
     this.route.queryParams
       .pipe(
         switchMap((params: Params) => {
-          const parameters = new HttpParams();
-          parameters.append('folder', environment.targetFolder);
-          _.map(params, param => {
-            console.log('single param: ', param);
-            return parameters.append('' + param.key + '', param.value);
-          });
-          console.log('params: ', parameters);
+          // If there's a target folder defined in the component then pass that value a a query parameter.
+          if (environment.targetFolder) {
+            this.router.navigate([], {
+              relativeTo: this.route,
+              queryParams: { folder: environment.targetFolder },
+              queryParamsHandling: 'merge'
+            });
+          }
           return this.http.get(environment.mayorUrl, { params: params });
-        }),
-        tap((file: any) => {
-          this.documentSubject.next(file);
-          this.dataStoreService.documentsSubject.next(file);
-        }),
-        tap(() => {
-          this.dataStoreService.filteredDocumentsSubject.next(
-            this.documentSubject.getValue()
-          );
-        }),
-        take(1)
+        })
       )
-      .subscribe();
+      .subscribe((file: any) => {
+        this.documentSubject.next(file);
+        this.dataStoreService.documentsSubject.next(file);
+        this.dataStoreService.filteredDocumentsSubject.next(
+          this.documentSubject.getValue()
+        );
+      });
   }
 
   setMonthsSubject(month: string) {
