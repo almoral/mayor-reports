@@ -4,7 +4,7 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false,
-  mayorUrl: 'https://www.miamidade.gov/mayor/searchApp/searchHandler.ashx?',
-  targetFolder: window['targetFolder'] || 'remarks'
+    production: false,
+    mayorUrl: 'https://www.miamidade.gov/mayor/searchApp/searchHandler.ashx?',
+    targetFolder: window['targetFolder'] || 'remarks'
 };
