@@ -1,82 +1,69 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { ActivatedRoute, Params, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { DataStoreService } from './data-store.service';
 
 export interface PDF {
-  showMessage: boolean;
-  filePath: string;
-  fileSize: string;
-  label: string;
-  errorMessage: string;
-  month: string;
-  monthLabel: string;
-  year: string;
+    showMessage: boolean;
+    filePath: string;
+    fileSize: string;
+    label: string;
+    errorMessage: string;
+    month: string;
+    monthLabel: string;
+    year: string;
 }
 
 @Injectable()
 export class DocStoreService {
-  documentSubject: BehaviorSubject<PDF[]> = new BehaviorSubject([
-    {
-      showMessage: false,
-      filePath: '',
-      fileSize: '',
-      label: '',
-      errorMessage: '',
-      month: '',
-      monthLabel: '',
-      year: ''
+    documentSubject: BehaviorSubject<PDF[]> = new BehaviorSubject([
+        {
+            showMessage: false,
+            filePath: '',
+            fileSize: '',
+            label: '',
+            errorMessage: '',
+            month: '',
+            monthLabel: '',
+            year: ''
+        }
+    ]);
+
+    public documents$: Observable<PDF[]> = this.documentSubject.asObservable();
+
+    constructor(private http: HttpClient, private dataStoreService: DataStoreService) {
+        this.requestPdfs();
     }
-  ]);
 
-  public documents$: Observable<PDF[]> = this.documentSubject.asObservable();
+    requestPdfs() {
+        if (environment.targetFolder) {
+            const params = new HttpParams().set('folder', environment.targetFolder);
 
-  constructor(
-    private http: HttpClient,
-    private route: ActivatedRoute,
-    private router: Router,
-    private dataStoreService: DataStoreService
-  ) {
-    this.requestPdfs();
-  }
-
-  requestPdfs() {
-    this.route.queryParams
-      .pipe(
-        switchMap((params: Params) => {
-          // If there's a target folder defined in the component then pass that value a a query parameter.
-          if (environment.targetFolder) {
-            this.router.navigate([], {
-              relativeTo: this.route,
-              queryParams: { folder: environment.targetFolder },
-              queryParamsHandling: 'merge'
+            this.http.get(environment.mayorUrl, { params: params }).subscribe((file: any) => {
+                this.documentSubject.next(file);
+                this.dataStoreService.documentsSubject.next(file);
+                this.dataStoreService.filteredDocumentsSubject.next(this.documentSubject.getValue());
             });
-          }
-          return this.http.get(environment.mayorUrl, { params: params });
-        })
-      )
-      .subscribe((file: any) => {
-        this.documentSubject.next(file);
-        this.dataStoreService.documentsSubject.next(file);
-        this.dataStoreService.filteredDocumentsSubject.next(
-          this.documentSubject.getValue()
-        );
-      });
-  }
+        } else {
+            this.http.get(environment.mayorUrl).subscribe((file: any) => {
+                this.documentSubject.next(file);
+                this.dataStoreService.documentsSubject.next(file);
+                this.dataStoreService.filteredDocumentsSubject.next(this.documentSubject.getValue());
+            });
+        }
+    }
 
-  setMonthsSubject(month: string) {
-    this.dataStoreService.currentSelectedMonthSubject.next(month);
-  }
+    setMonthsSubject(month: string) {
+        this.dataStoreService.currentSelectedMonthSubject.next(month);
+    }
 
-  setYearsSubject(year: string) {
-    this.dataStoreService.currentSelectedYearSubject.next(year);
-  }
+    setYearsSubject(year: string) {
+        this.dataStoreService.currentSelectedYearSubject.next(year);
+    }
 
-  setSearchTermSubject(searchTerm: string) {
-    this.dataStoreService.searchTermSubject.next(searchTerm);
-  }
+    setSearchTermSubject(searchTerm: string) {
+        this.dataStoreService.searchTermSubject.next(searchTerm);
+    }
 }
