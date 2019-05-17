@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Location } from '@angular/common';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { DataStoreService } from './data-store.service';
 
