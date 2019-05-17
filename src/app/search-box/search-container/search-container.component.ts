@@ -6,10 +6,11 @@ import {
   Output,
   EventEmitter
 } from '@angular/core';
-import { Observable, combineLatest, BehaviorSubject, Subject } from 'rxjs';
-import { map, take, takeUntil, distinctUntilChanged } from 'rxjs/operators';
+import { Observable, combineLatest, BehaviorSubject, Subject, of } from 'rxjs';
+import { map, take, takeUntil, tap } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { MonthService } from '../../shared/services/month.service';
+import { DataStoreService } from '../../shared/services/data-store.service';
 
 @Component({
   selector: 'mdc-search-container',
@@ -17,7 +18,10 @@ import { MonthService } from '../../shared/services/month.service';
   styleUrls: ['./search-container.component.css']
 })
 export class SearchContainerComponent implements OnInit, OnDestroy {
-  constructor(private monthService: MonthService) {}
+  constructor(
+    private monthService: MonthService,
+    private dataStoreService: DataStoreService
+  ) {}
 
   showFiltersToggle = false;
 
@@ -25,23 +29,20 @@ export class SearchContainerComponent implements OnInit, OnDestroy {
   // We're using the smart container dumb component approach.
 
   @Input() years: any;
+  @Input() months: any;
 
   @Input() textBoxPlaceholder: string;
   @Input() titleFilter$: string;
   @Input() liveFilter: boolean;
   @Input() types$ = new BehaviorSubject([]);
-
-  @Input() currentSelectedTypes$ = new BehaviorSubject([]);
-  @Input() categories$ = new BehaviorSubject([]);
-
-  @Input() currentSelectedCategories$ = new BehaviorSubject([]);
   @Input() showFiltersButton: boolean;
 
-  @Output() onSetTypesFilter = new EventEmitter();
-  @Output() onSetCategoriesFilter = new EventEmitter();
+  @Output() setYearFilter = new EventEmitter();
+  @Output() setMonthFilter = new EventEmitter();
   @Output() onSetTitleFilter = new EventEmitter();
 
-  months = this.monthService.months;
+  currentSelectedMonth$ = this.dataStoreService.currentSelectedMonth$;
+  currentSelectedYear$ = this.dataStoreService.currentSelectedYear$;
 
   selectedFilters$: Observable<Array<Object>>;
   combinedFilters$: Observable<Array<Object>>;
@@ -62,17 +63,12 @@ export class SearchContainerComponent implements OnInit, OnDestroy {
     });
 
     // Combining the different filter types to create a master list of filters to populate the chips.
-    this.combinedFilters$ = combineLatest(this.types$, this.categories$).pipe(
-      map(([types, categories]) => [...types, ...categories])
-    );
+    this.combinedFilters$ = combineLatest(this.months, this.years);
 
     // Combining the different filter types to create a list of selected filters to populate the chips.
     this.selectedFilters$ = combineLatest(
-      this.currentSelectedTypes$,
-      this.currentSelectedCategories$
-    ).pipe(
-      // Flattening the arrays... this is so pretty.
-      map(([types, categories]) => [...types, ...categories])
+      this.currentSelectedYear$,
+      this.currentSelectedMonth$
     );
   }
 
@@ -83,22 +79,22 @@ export class SearchContainerComponent implements OnInit, OnDestroy {
 
   // Calling lodash's difference method on both categories and types because the function ignores values that don't exist in the array it's looking at.
   removeFilter(searchTerm: string) {
-    this.currentSelectedTypes$
+    this.currentSelectedYear$
       .pipe(
-        map(types => _.difference(types, [searchTerm])),
+        map(year => _.difference(year, [searchTerm])),
         take(1)
       )
       .subscribe(value => {
-        this.onSetTypesFilter.emit(value);
+        this.setYearFilter.emit(value);
       });
 
-    this.currentSelectedCategories$
+    this.currentSelectedMonth$
       .pipe(
-        map(categories => _.difference(categories, [searchTerm])),
+        map(month => _.difference(month, [searchTerm])),
         take(1)
       )
       .subscribe(value => {
-        this.onSetCategoriesFilter.emit(value);
+        this.setMonthFilter.emit(value);
       });
   }
 
@@ -110,20 +106,19 @@ export class SearchContainerComponent implements OnInit, OnDestroy {
     this.searchTermSubject.next(title);
   }
 
-  onTypesSelected(options: string[]) {
-    this.onSetTypesFilter.emit(options);
+  // These are the years options.
+  onYearSelected(option: string) {
+    this.setYearFilter.emit(option);
   }
 
-  onCategoriesSelected(options: string[]) {
-    this.onSetCategoriesFilter.emit(options);
+  // These are the month options.
+  onMonthSelected(options: string[]) {
+    this.setMonthFilter.emit(options);
   }
 
   //  This method is used by the search button and pressing enter on the textbox when liveFilter is set to false.
   updateTitleFilter() {
-    // I need to think of a more declarative way to handle this.
-    this.searchTerm$
-      .pipe(take(1))
-      .subscribe(searchTerm => this.onSetTitleFilter.emit(searchTerm));
+    this.onSetTitleFilter.emit(this.searchTermSubject.getValue());
   }
 
   // This method is used when liveFilter is set to true. It's a realtime filter.
@@ -132,7 +127,7 @@ export class SearchContainerComponent implements OnInit, OnDestroy {
   }
 
   clearFilters() {
-    this.onSetCategoriesFilter.emit([]);
-    this.onSetTypesFilter.emit([]);
+    this.setMonthFilter.emit([]);
+    this.setYearFilter.emit([]);
   }
 }

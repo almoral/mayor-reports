@@ -1,10 +1,10 @@
-.btn-custom--blue {
-  background-color: #027abb;
+.btn-custom--gold {
+  background-color: #baa20a;
 }
 
-.btn-custom--blue:hover,
-.btn-custom--blue:focus {
-  background-color: #03a9f4;
+.btn-custom--gold:hover,
+.btn-custom--gold:focus {
+  background-color: #baa20a;
 }
 
 /* --------------------------
@@ -18,12 +18,13 @@ FILTERS
   overflow: hidden;
   position: absolute;
   width: 100%;
+  max-width: 1063px;
   z-index: 100;
 }
 
 .search-filters :focus {
   outline-offset: 4px;
-  outline: 3px dotted #3bd1ff;
+  outline: 3px dotted #baa20a;
 }
 
 .search-filters-top {
@@ -64,7 +65,6 @@ FILTERS
   border: none;
   margin: 0;
   padding: 0;
-  height: 0;
 }
 
 .secondary-filters {

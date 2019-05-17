@@ -2,6 +2,7 @@
   <div class="search">
     <!-- Show Filters Button -->
     <mdc-show-filters
+      [showFiltersButton]="showFiltersButton"
       [showFiltersToggle]="showFiltersToggle"
       [targetSize]="'desktop'"
       (onShowFilters)="showFilters($event)"
@@ -11,13 +12,13 @@
     <!-- Filter Container -->
     <mdc-filter-list-container
       [showFiltersToggle]="showFiltersToggle"
-      [types$]="types$"
-      [categories$]="categories$"
-      [currentSelectedCategories$]="currentSelectedCategories$"
-      [currentSelectedTypes$]="currentSelectedTypes$"
+      [years$]="years | async"
+      [months$]="months | async"
+      [currentSelectedMonth]="currentSelectedMonth$"
+      [currentSelectedYear]="currentSelectedYear$"
       (onShowFilters)="showFilters($event)"
-      (typesSelected)="onTypesSelected($event)"
-      (categoriesSelected)="onCategoriesSelected($event)"
+      (yearSelected)="onYearSelected($event)"
+      (monthSelected)="onMonthSelected($event)"
       (onClearFilters)="clearFilters()"
     >
     </mdc-filter-list-container>
@@ -35,15 +36,13 @@
 
     <mdc-search-button
       [liveFilter]="liveFilter"
+      [searchTerm]="titleFilter$ | async"
       (onUpdate)="updateTitleFilter()"
     >
     </mdc-search-button>
 
     <!-- This is the search button with icon. I'm leaving this in case Jaime decides she wants it. -->
   </div>
-  <mdc-month-selector [months]="months"></mdc-month-selector>
-
-  <mdc-year-selector [years]="years"></mdc-year-selector>
 </div>
 
 <mdc-selected-filters

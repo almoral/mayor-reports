@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import {TestOptions} from '../../shared/test-data/options';
+import { TestOptions } from '../../shared/test-data/options';
 import { SelectedFiltersComponent } from './selected-filters.component';
 
 describe('SelectedFiltersComponent', () => {
@@ -9,14 +9,9 @@ describe('SelectedFiltersComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        SelectedFiltersComponent
-      ],
-      providers: [
-        TestOptions
-      ]
-    })
-    .compileComponents();
+      declarations: [SelectedFiltersComponent],
+      providers: [TestOptions]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -31,12 +26,10 @@ describe('SelectedFiltersComponent', () => {
   });
 
   it('should return an array of all matching elements', () => {
-    console.log('types: ', testOptions.types);
-    const matchCount = component.matchTags(testOptions.types, testOptions.selectedTypes);
+    const matchCount = component.matchTags(
+      testOptions.types,
+      testOptions.selectedTypes
+    );
     expect(matchCount.length).toBe(2);
   });
-
-
-
-
 });

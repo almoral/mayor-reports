@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, of } from 'rxjs';
-import { switchMap, map, tap, take } from 'rxjs/operators';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import * as _ from 'lodash';
+import { DataStoreService } from './data-store.service';
 
 export interface PDF {
   showMessage: boolean;
@@ -34,37 +35,48 @@ export class DocStoreService {
 
   public documents$: Observable<PDF[]> = this.documentSubject.asObservable();
 
-  filteredDocumentsSubject = new BehaviorSubject<PDF[]>(null);
-  filteredDocuments$ = this.filteredDocumentsSubject.asObservable();
-
-  constructor(private http: HttpClient, private route: ActivatedRoute) {
+  constructor(
+    private http: HttpClient,
+    private route: ActivatedRoute,
+    private router: Router,
+    private dataStoreService: DataStoreService
+  ) {
     this.requestPdfs();
   }
 
   requestPdfs() {
     this.route.queryParams
       .pipe(
-        switchMap((params: Params) =>
-          this.http.get(environment.mayorUrl, { params: params })
-        ),
-        tap((file: any) => this.documentSubject.next(file)),
-        tap(() => this.filterDocuments('')),
-        take(1)
+        switchMap((params: Params) => {
+          // If there's a target folder defined in the component then pass that value a a query parameter.
+          if (environment.targetFolder) {
+            this.router.navigate([], {
+              relativeTo: this.route,
+              queryParams: { folder: environment.targetFolder },
+              queryParamsHandling: 'merge'
+            });
+          }
+          return this.http.get(environment.mayorUrl, { params: params });
+        })
       )
-      .subscribe();
+      .subscribe((file: any) => {
+        this.documentSubject.next(file);
+        this.dataStoreService.documentsSubject.next(file);
+        this.dataStoreService.filteredDocumentsSubject.next(
+          this.documentSubject.getValue()
+        );
+      });
   }
 
-  filterDocuments(searchTerm: string) {
-    const documents = this.documentSubject.getValue();
+  setMonthsSubject(month: string) {
+    this.dataStoreService.currentSelectedMonthSubject.next(month);
+  }
 
-    if (_.isEmpty(searchTerm)) {
-      this.filteredDocumentsSubject.next(documents);
-    }
+  setYearsSubject(year: string) {
+    this.dataStoreService.currentSelectedYearSubject.next(year);
+  }
 
-    this.filteredDocumentsSubject.next(
-      _.filter(documents, (document: PDF) => {
-        return new RegExp(searchTerm, 'i').test(document.label);
-      })
-    );
+  setSearchTermSubject(searchTerm: string) {
+    this.dataStoreService.searchTermSubject.next(searchTerm);
   }
 }

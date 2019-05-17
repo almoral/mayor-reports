@@ -51,7 +51,7 @@
 .search__filter:focus,
 .search__input:focus {
   outline-offset: -2px;
-  outline: 3px dotted #3bd1ff;
+  outline: 3px dotted #baa20a;
 }
 
 .search__item {

@@ -1,17 +1,20 @@
-<section class="widget" aria-labelledby="filterType">
-  <legend class="sr-only">Choose a {{heading | lowercase}} to filter by:</legend>
+<div class="search-filters__category">
+  <h2 class="search-filters__sub-titles" id="filterType">{{ heading }}</h2>
+
+  <legend class="sr-only">
+    Choose a {{ heading | lowercase }} to filter by:
+  </legend>
   <fieldset class="search-filters__fieldset">
-    <h2 class="search-filters__sub-titles" id="filterType">{{heading}}</h2>
-    <legend class="sr-only">Choose a {{heading | lowercase}} to filter by:</legend>
-      <div class='search-filters__list'>
-
-          <mdc-checkbox-group
-            [options]="options"
-            [currentSelectedOptions]="currentSelectedOptions"
-            (optionsSelected)="onOptionsSelected($event)"
-          >
-          </mdc-checkbox-group>
-
-        </div>
+    <legend class="sr-only">
+      Choose a {{ heading | lowercase }} to filter by:
+    </legend>
+    <div class="search-filters__list">
+      <mdc-checkbox-group
+        [options]="options"
+        [currentSelectedOptions]="currentSelectedOptions | async"
+        (optionsSelected)="onOptionsSelected($event)"
+      >
+      </mdc-checkbox-group>
+    </div>
   </fieldset>
-</section>
+</div>

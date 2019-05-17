@@ -7,36 +7,36 @@ import { Observable } from 'rxjs';
   styleUrls: ['./filter-list-container.component.css']
 })
 export class FilterListContainerComponent implements OnInit {
-
   @Input() showFiltersToggle: boolean;
-  @Input() types$: Observable<Array<Object>>;
-  @Input() categories$: Observable<Array<Object>>;
-  @Input() currentSelectedTypes$: Observable<Array<Object>>;
-  @Input() currentSelectedCategories$: Observable<Array<Object>>;
+  @Input() years$: Observable<Array<Object>>;
+  @Input() months$: Observable<Array<Object>>;
+  @Input() currentSelectedMonth: string;
+  @Input() currentSelectedYear: string;
 
   @Output() onShowFilters = new EventEmitter();
-  @Output() typesSelected = new EventEmitter();
-  @Output() categoriesSelected = new EventEmitter();
+  @Output() yearSelected = new EventEmitter();
+  @Output() monthSelected = new EventEmitter();
   @Output() onClearFilters = new EventEmitter();
 
   constructor() {}
 
   ngOnInit() {}
 
-  onTypesSelected($event) {
-    this.typesSelected.emit($event);
+  // These are the year options
+  onYearSelected($event) {
+    this.yearSelected.emit($event);
   }
 
-  onCategoriesSelected($event) {
-    this.categoriesSelected.emit($event);
+  // These are the month options.
+  onMonthSelected($event) {
+    this.monthSelected.emit($event);
   }
 
   showFilters() {
-    this.onShowFilters.emit(this.showFiltersToggle = !this.showFiltersToggle);
+    this.onShowFilters.emit((this.showFiltersToggle = !this.showFiltersToggle));
   }
 
   clearFilters() {
     this.onClearFilters.emit();
   }
-
 }
