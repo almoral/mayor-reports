@@ -5,6 +5,6 @@
 
 export const environment = {
   production: false,
-  mayorUrl: 'http://s0145390.miamidade.gov/mayor/searchApp/searchHandler.ashx?',
+  mayorUrl: 'http://teamsite.miamidade.gov/mayor/searchApp/searchHandler.ashx?',
   targetFolder: window['targetFolder'] || 'reports'
 };
